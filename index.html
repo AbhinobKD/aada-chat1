@@ -1,0 +1,2972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0c0e12">
+<title>AADAmeet · UI/UX Channel</title>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN SYSTEM — STRUCTURED TERMINAL
+   Philosophy: editorial precision, no glow,
+   sharp hierarchy, confident negative space
+═══════════════════════════════════════════ */
+:root {
+  /* Dark palette — ink on slate */
+  --ink-0: #f4f5f7;
+  --ink-1: #b8bcc8;
+  --ink-2: #6b7280;
+  --ink-3: #374151;
+  --ink-4: #1f2937;
+
+  --base-0: #0c0e12;
+  --base-1: #111318;
+  --base-2: #161921;
+  --base-3: #1c2028;
+  --base-4: #232834;
+  --base-5: #2d3344;
+
+  --surface: #161921;
+  --surface-2: #1c2028;
+  --surface-3: #232834;
+
+  /* Accent — a single restrained blue */
+  --accent: #3b82f6;
+  --accent-soft: rgba(59,130,246,0.12);
+  --accent-border: rgba(59,130,246,0.25);
+
+  /* Semantic */
+  --green: #22c55e;
+  --green-soft: rgba(34,197,94,0.1);
+  --amber: #f59e0b;
+  --amber-soft: rgba(245,158,11,0.1);
+  --red: #ef4444;
+  --red-soft: rgba(239,68,68,0.1);
+
+  /* Borders */
+  --border: rgba(255,255,255,0.06);
+  --border-2: rgba(255,255,255,0.1);
+
+  /* Type */
+  --mono: 'IBM Plex Mono', 'JetBrains Mono', monospace;
+  --sans: 'IBM Plex Sans', system-ui, sans-serif;
+
+  /* Radius */
+  --r-xs: 3px;
+  --r-sm: 5px;
+  --r: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+
+  /* Shadows — crisp, no bloom */
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.6);
+  --shadow-overlay: 0 16px 48px rgba(0,0,0,0.7);
+
+  /* Sidebar width */
+  --sidebar-w: 240px;
+}
+
+[data-theme="light"] {
+  --ink-0: #0f172a;
+  --ink-1: #1e293b;
+  --ink-2: #475569;
+  --ink-3: #94a3b8;
+  --ink-4: #cbd5e1;
+
+  --base-0: #f1f5f9;
+  --base-1: #e8edf5;
+  --base-2: #dde4ef;
+  --base-3: #d1d9e8;
+  --base-4: #c4cede;
+  --base-5: #b8c3d4;
+
+  --surface: #ffffff;
+  --surface-2: #f8fafd;
+  --surface-3: #f1f5fb;
+
+  --accent: #2563eb;
+  --accent-soft: rgba(37,99,235,0.08);
+  --accent-border: rgba(37,99,235,0.2);
+
+  --green: #16a34a;
+  --green-soft: rgba(22,163,74,0.08);
+  --amber: #d97706;
+  --amber-soft: rgba(217,119,6,0.08);
+  --red: #dc2626;
+  --red-soft: rgba(220,38,38,0.08);
+
+  --border: rgba(0,0,0,0.06);
+  --border-2: rgba(0,0,0,0.1);
+
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+  --shadow-overlay: 0 16px 48px rgba(0,0,0,0.15);
+}
+
+/* ─── Reset ──────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  overscroll-behavior: none;
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--base-0);
+  color: var(--ink-0);
+  min-height: 100dvh;
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  touch-action: pan-y;
+  transition: background 0.25s, color 0.25s;
+}
+
+/* Subtle dot-grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 0;
+}
+[data-theme="light"] body::before {
+  background-image: radial-gradient(circle, rgba(0,0,0,0.04) 1px, transparent 1px);
+}
+
+/* ─── Layout shell ───────────────────────────── */
+.app-shell {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   TOP BAR
+═══════════════════════════════════════════ */
+.topbar {
+  height: 52px;
+  min-height: 52px;
+  background: var(--base-1);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  position: relative;
+  z-index: 50;
+  flex-shrink: 0;
+}
+
+[data-theme="light"] .topbar { background: var(--surface); }
+
+.topbar-section {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.topbar-brand {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  padding: 0 16px;
+  gap: 10px;
+  border-right: 1px solid var(--border);
+}
+
+.brand-logo {
+  width: 28px; height: 28px;
+  background: var(--accent);
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.brand-logo svg { width: 14px; height: 14px; fill: #fff; }
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.brand-name {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-0);
+  letter-spacing: -0.3px;
+  line-height: 1;
+}
+
+.brand-sub {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-2);
+  letter-spacing: 0.3px;
+  line-height: 1;
+}
+
+/* Mobile toggle */
+.topbar-menu-btn {
+  display: none;
+  width: 52px; height: 52px;
+  background: none; border: none;
+  border-right: 1px solid var(--border);
+  color: var(--ink-1);
+  cursor: pointer;
+  align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.topbar-menu-btn:hover { background: var(--base-2); color: var(--ink-0); }
+.topbar-menu-btn .material-icons { font-size: 20px; }
+
+.topbar-channel {
+  flex: 1;
+  padding: 0 20px;
+  gap: 8px;
+}
+
+.channel-info {
+  display: flex; align-items: center; gap: 8px;
+}
+
+.channel-hash {
+  font-family: var(--mono);
+  font-size: 16px;
+  color: var(--ink-2);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.channel-name {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-0);
+  letter-spacing: -0.2px;
+}
+
+.channel-topic {
+  font-size: 12px;
+  color: var(--ink-2);
+  padding-left: 8px;
+  border-left: 1px solid var(--border-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+}
+
+.topbar-actions {
+  padding: 0 14px;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* Connection badge */
+.conn-badge {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 10px;
+  background: var(--base-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-2);
+  font-weight: 500;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.conn-badge.online {
+  background: var(--green-soft);
+  border-color: rgba(34,197,94,0.2);
+  color: var(--green);
+}
+
+[data-theme="light"] .conn-badge.online {
+  color: var(--green);
+}
+
+.conn-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+
+.conn-badge.online .conn-dot {
+  animation: pulseDot 2.5s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Icon button */
+.icon-btn {
+  width: 32px; height: 32px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--ink-2);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+
+.icon-btn:hover {
+  background: var(--base-3);
+  border-color: var(--border-2);
+  color: var(--ink-0);
+}
+
+.icon-btn:active { transform: scale(0.92); }
+.icon-btn .material-icons { font-size: 17px; }
+
+/* ═══════════════════════════════════════════
+   MAIN BODY (sidebar + chat)
+═══════════════════════════════════════════ */
+.app-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ═══════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════ */
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: var(--base-1);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.28s cubic-bezier(0.16,1,0.3,1);
+}
+
+[data-theme="light"] .sidebar { background: var(--surface-2); }
+
+/* Sidebar own user strip */
+.sidebar-self {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  display: none;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.sidebar-self.visible { display: flex; }
+
+.self-avatar {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 12px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.self-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-0);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.self-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  padding: 2px 6px;
+  border-radius: var(--r-xs);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* Members section */
+.sidebar-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 14px 8px;
+}
+
+.sidebar-section-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink-2);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.online-pill {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--green);
+  background: var(--green-soft);
+  border: 1px solid rgba(34,197,94,0.2);
+  padding: 2px 7px;
+  border-radius: 100px;
+  display: flex; align-items: center; gap: 4px;
+}
+
+.online-pill::before {
+  content: '';
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.user-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 8px 12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--base-5) transparent;
+}
+
+.user-list::-webkit-scrollbar { width: 3px; }
+.user-list::-webkit-scrollbar-thumb { background: var(--base-5); border-radius: 2px; }
+
+.user-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 8px;
+  border-radius: var(--r-sm);
+  margin-bottom: 1px;
+  transition: background 0.12s;
+  cursor: default;
+}
+
+.user-item:hover { background: var(--base-3); }
+
+.user-avatar {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 12px;
+  color: #fff;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.user-presence {
+  position: absolute;
+  bottom: -1px; right: -1px;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--ink-3);
+  border: 2px solid var(--base-1);
+  transition: background 0.2s;
+}
+
+[data-theme="light"] .user-presence { border-color: var(--surface-2); }
+
+.user-presence.online { background: var(--green); }
+
+.user-info { flex: 1; min-width: 0; }
+
+.user-name {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.user-typing-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════
+   CHAT AREA
+═══════════════════════════════════════════ */
+.chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--base-0);
+  min-height: 0;
+  overflow: hidden;
+}
+
+[data-theme="light"] .chat-area { background: var(--base-1); }
+
+/* Chat sub-header */
+.chat-header {
+  height: 44px;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--base-1);
+  flex-shrink: 0;
+}
+
+[data-theme="light"] .chat-header { background: var(--surface); }
+
+.chat-header-left {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+.chat-header-left .material-icons { font-size: 14px; color: var(--accent); }
+
+.chat-header-right {
+  display: flex; align-items: center; gap: 4px;
+}
+
+.action-chip {
+  display: flex; align-items: center; gap: 4px;
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--r-xs);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+  min-height: 28px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.action-chip .material-icons { font-size: 13px; }
+
+.action-chip:hover {
+  background: var(--base-3);
+  border-color: var(--border-2);
+  color: var(--ink-0);
+}
+
+.action-chip:active { transform: scale(0.94); }
+.action-chip.active {
+  background: var(--accent-soft);
+  border-color: var(--accent-border);
+  color: var(--accent);
+}
+
+/* ─── Messages ───────────────────────────────── */
+.messages-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 20px 8px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  min-height: 0;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--base-5) transparent;
+}
+
+.messages-container::-webkit-scrollbar { width: 3px; }
+.messages-container::-webkit-scrollbar-thumb { background: var(--base-5); border-radius: 2px; }
+
+/* Date divider */
+.date-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0 12px;
+  user-select: none;
+}
+
+.date-divider-line { flex: 1; height: 1px; background: var(--border); }
+
+.date-divider-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-3);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-xs);
+}
+
+/* System message */
+.system-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.3px;
+}
+
+.system-message::before,
+.system-message::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  max-width: 60px;
+}
+
+/* Message rows */
+.message {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 2px;
+  position: relative;
+  animation: msgIn 0.2s ease-out;
+}
+
+.message.spaced { margin-top: 14px; }
+
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.message.own { flex-direction: row-reverse; }
+
+.message-avatar {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 11px;
+  color: #fff;
+  flex-shrink: 0;
+  align-self: flex-end;
+}
+
+.message-avatar.hidden { visibility: hidden; }
+
+.message-content {
+  max-width: 65%;
+  display: flex;
+  flex-direction: column;
+}
+
+.message.own .message-content { align-items: flex-end; }
+
+.message-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3px;
+  padding: 0 2px;
+}
+
+.message.own .message-meta { flex-direction: row-reverse; }
+
+.message-sender {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-1);
+  letter-spacing: -0.1px;
+}
+
+.message-time {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-3);
+}
+
+/* Bubble */
+.message-bubble {
+  background: var(--base-2);
+  border: 1px solid var(--border);
+  padding: 9px 13px;
+  border-radius: 3px 10px 10px 10px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-0);
+  word-wrap: break-word;
+  transition: border-color 0.15s;
+}
+
+[data-theme="light"] .message-bubble { background: var(--surface); }
+
+.message-bubble:hover { border-color: var(--border-2); }
+
+.message.own .message-bubble {
+  background: var(--accent);
+  border-color: transparent;
+  color: #fff;
+  border-radius: 10px 3px 10px 10px;
+}
+
+.message.own .message-bubble:hover { border-color: transparent; }
+
+/* Typing indicator */
+.typing-indicator {
+  display: flex; gap: 10px;
+  margin: 6px 0;
+  align-items: flex-end;
+  animation: msgIn 0.2s ease-out;
+}
+
+.typing-bubble {
+  background: var(--base-2);
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  border-radius: 3px 10px 10px 10px;
+  display: flex; gap: 4px; align-items: center;
+}
+
+[data-theme="light"] .typing-bubble { background: var(--surface); }
+
+.typing-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--ink-2);
+  animation: typingBounce 1.4s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.18s; }
+.typing-dot:nth-child(3) { animation-delay: 0.36s; }
+
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-5px); opacity: 1; }
+}
+
+/* ─── Input Area ─────────────────────────────── */
+.input-area {
+  padding: 12px 16px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  background: var(--base-1);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+[data-theme="light"] .input-area { background: var(--surface); }
+
+/* Toolbar */
+.input-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.input-toolbar::-webkit-scrollbar { display: none; }
+
+.toolbar-btn {
+  width: 28px; height: 28px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--r-xs);
+  color: var(--ink-2);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.12s;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.toolbar-btn:hover {
+  background: var(--base-3);
+  border-color: var(--border-2);
+  color: var(--ink-0);
+}
+
+.toolbar-btn .material-icons { font-size: 15px; }
+
+.toolbar-sep {
+  width: 1px; height: 16px;
+  background: var(--border);
+  flex-shrink: 0;
+  margin: 0 2px;
+}
+
+/* Code insert pill */
+.code-insert-btn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 0 10px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--r-xs);
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: all 0.12s;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.code-insert-btn:hover {
+  background: var(--base-3);
+  border-color: var(--border-2);
+  color: var(--ink-0);
+}
+
+.code-insert-btn .material-icons { font-size: 13px; }
+
+/* Input row */
+.input-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.input-wrapper-field {
+  flex: 1;
+  position: relative;
+}
+
+#messageInput {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--base-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  color: var(--ink-0);
+  font-size: 13.5px;
+  font-family: var(--sans);
+  resize: none;
+  max-height: 140px;
+  min-height: 40px;
+  line-height: 1.55;
+  transition: border-color 0.2s, background 0.2s;
+  -webkit-appearance: none;
+}
+
+[data-theme="light"] #messageInput { background: var(--base-0); }
+
+#messageInput:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--base-3);
+}
+
+[data-theme="light"] #messageInput:focus { background: #fff; }
+
+#messageInput::placeholder { color: var(--ink-3); }
+
+.char-counter {
+  position: absolute;
+  bottom: 8px; right: 10px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-3);
+  pointer-events: none;
+  transition: color 0.2s;
+}
+
+.char-counter.warn { color: var(--amber); }
+.char-counter.limit { color: var(--red); }
+
+.send-btn {
+  width: 40px; height: 40px; min-width: 40px;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--r);
+  color: #fff;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.send-btn:hover { background: #2563eb; }
+.send-btn:active { transform: scale(0.9); }
+.send-btn .material-icons { font-size: 18px; }
+
+/* ═══════════════════════════════════════════
+   LOGIN SCREEN
+═══════════════════════════════════════════ */
+.login-screen {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-wrap {
+  width: 100%;
+  max-width: 380px;
+}
+
+/* Login brand */
+.login-brand {
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.login-logo {
+  width: 40px; height: 40px;
+  background: var(--accent);
+  border-radius: var(--r);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.login-logo svg { width: 20px; height: 20px; fill: #fff; }
+
+.login-brand-text { display: flex; flex-direction: column; gap: 2px; }
+
+.login-brand-name {
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink-0);
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.login-brand-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-2);
+  letter-spacing: 0.3px;
+}
+
+/* Card */
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-lg);
+  animation: cardIn 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Top accent bar */
+.login-card::before {
+  content: '';
+  display: block;
+  height: 2px;
+  margin: -28px -28px 24px;
+  background: var(--accent);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+}
+
+.login-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink-0);
+  margin-bottom: 4px;
+}
+
+.login-card-sub {
+  font-size: 13px;
+  color: var(--ink-2);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+/* Form fields */
+.field { margin-bottom: 16px; }
+
+.field-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.field-input-wrap { position: relative; }
+
+.field-icon {
+  position: absolute;
+  left: 11px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-3);
+  font-size: 17px;
+  pointer-events: none;
+  transition: color 0.15s;
+  z-index: 1;
+  line-height: 1;
+}
+
+input:not([type="checkbox"]) {
+  width: 100%;
+  padding: 10px 12px 10px 38px;
+  background: var(--base-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--ink-0);
+  font-size: 13.5px;
+  font-family: var(--sans);
+  transition: all 0.2s;
+  -webkit-appearance: none;
+}
+
+[data-theme="light"] input:not([type="checkbox"]) { background: var(--base-0); }
+
+input:not([type="checkbox"]):focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--base-3);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+[data-theme="light"] input:not([type="checkbox"]):focus { background: #fff; }
+
+input:not([type="checkbox"]):focus + .field-icon,
+.field-icon:has(+ input:focus),
+input:not([type="checkbox"]):focus ~ .field-icon { color: var(--accent); }
+
+/* Target icon when its sibling input is focused (icon comes before input) */
+.field-input-wrap:focus-within .field-icon { color: var(--accent); }
+
+input::placeholder { color: var(--ink-3); }
+
+/* Remember row */
+.remember-row {
+  display: flex; align-items: center; gap: 9px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Hide native checkbox */
+.remember-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0; height: 0;
+  pointer-events: none;
+}
+
+/* Custom checkbox box */
+.custom-checkbox {
+  width: 16px; height: 16px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--border-2);
+  border-radius: 3px;
+  background: var(--base-2);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+  position: relative;
+}
+
+[data-theme="light"] .custom-checkbox { background: var(--base-0); }
+
+/* Tick mark via SVG path (clip-path + pseudo) */
+.custom-checkbox::after {
+  content: '';
+  display: block;
+  width: 9px; height: 5px;
+  border-left: 1.8px solid transparent;
+  border-bottom: 1.8px solid transparent;
+  transform: rotate(-45deg) translateY(-1px);
+  transition: border-color 0.12s;
+}
+
+/* Checked state */
+.remember-checkbox:checked ~ .custom-checkbox {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.remember-checkbox:checked ~ .custom-checkbox::after {
+  border-left-color: #fff;
+  border-bottom-color: #fff;
+}
+
+/* Hover */
+.remember-row:hover .custom-checkbox {
+  border-color: var(--accent);
+}
+
+.remember-label {
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+
+/* Connect button */
+.login-btn {
+  width: 100%;
+  padding: 11px;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--r-sm);
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 600;
+  font-family: var(--sans);
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+
+.login-btn:hover { background: #2563eb; }
+.login-btn:active { transform: scale(0.98); }
+.login-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.login-btn .material-icons { font-size: 18px; }
+
+/* Login footer note */
+.login-footer-note {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--base-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-2);
+}
+
+.login-footer-note .material-icons { font-size: 13px; flex-shrink: 0; color: var(--accent); }
+
+/* ═══════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════ */
+.toast {
+  position: fixed;
+  top: 64px;
+  right: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  color: var(--ink-0);
+  padding: 9px 14px;
+  border-radius: var(--r);
+  box-shadow: var(--shadow-overlay);
+  display: flex; align-items: center; gap: 8px;
+  animation: toastIn 0.25s cubic-bezier(0.16,1,0.3,1);
+  z-index: 9999;
+  max-width: 320px;
+  font-size: 13px;
+  border-left: 3px solid var(--accent);
+}
+
+@keyframes toastIn {
+  from { transform: translateX(110%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.toast .material-icons { font-size: 15px; flex-shrink: 0; color: var(--accent); }
+.toast.error { border-left-color: var(--red); }
+.toast.error .material-icons { color: var(--red); }
+.toast.success { border-left-color: var(--green); }
+.toast.success .material-icons { color: var(--green); }
+.toast.warn { border-left-color: var(--amber); }
+.toast.warn .material-icons { color: var(--amber); }
+
+/* ═══════════════════════════════════════════
+   LOADING
+═══════════════════════════════════════════ */
+.loading-overlay {
+  position: fixed; inset: 0;
+  background: rgba(12,14,18,0.75);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9000;
+}
+
+.loading-overlay.active { display: flex; }
+
+[data-theme="light"] .loading-overlay { background: rgba(241,245,249,0.75); }
+
+.loading-card {
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-lg);
+  padding: 28px 36px;
+  box-shadow: var(--shadow-overlay);
+  text-align: center;
+  min-width: 200px;
+  animation: cardIn 0.3s ease;
+}
+
+.loader-ring {
+  width: 36px; height: 36px;
+  border: 2px solid var(--border-2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: 0 auto 14px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loader-text {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-2);
+  letter-spacing: 0.3px;
+}
+
+.loader-text::after {
+  content: '';
+  animation: dots 1.2s steps(4) infinite;
+}
+@keyframes dots {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+}
+
+/* ═══════════════════════════════════════════
+   CODE BLOCKS
+═══════════════════════════════════════════ */
+.code-block {
+  background: var(--base-0);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r);
+  margin: 6px 0;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+[data-theme="light"] .code-block { background: #f6f8fa; }
+
+.message.own .code-block { border-color: rgba(255,255,255,0.15); }
+
+.code-block-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 12px;
+  background: var(--base-1);
+  border-bottom: 1px solid var(--border);
+}
+
+[data-theme="light"] .code-block-head { background: var(--base-2); }
+
+.code-lang-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex; align-items: center; gap: 5px;
+}
+
+.code-lang-label .material-icons { font-size: 13px; }
+
+.code-block-actions { display: flex; gap: 4px; }
+
+.code-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--ink-2);
+  padding: 3px 8px;
+  border-radius: var(--r-xs);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 3px;
+  transition: all 0.12s;
+  letter-spacing: 0.3px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.code-btn:hover { background: var(--base-3); border-color: var(--border-2); color: var(--ink-0); }
+.code-btn .material-icons { font-size: 12px; }
+
+.code-btn.run {
+  background: var(--green-soft);
+  border-color: rgba(34,197,94,0.2);
+  color: var(--green);
+}
+.code-btn.run:hover { background: rgba(34,197,94,0.18); }
+
+.code-block-body {
+  max-height: 340px;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--base-5) transparent;
+}
+
+.code-block-body::-webkit-scrollbar { width: 3px; height: 3px; }
+.code-block-body::-webkit-scrollbar-thumb { background: var(--base-5); border-radius: 2px; }
+
+.code-block-body pre {
+  margin: 0;
+  padding: 12px 14px;
+  background: transparent !important;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  overflow-x: auto;
+}
+
+.code-block-body code { font-family: var(--mono); }
+
+/* Inline code in messages */
+.message-bubble code:not([class]) {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: rgba(0,0,0,0.15);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.message.own .message-bubble code:not([class]) {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Links */
+.message-bubble a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-border);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  word-break: break-all;
+  transition: opacity 0.15s;
+}
+
+.message.own .message-bubble a {
+  color: rgba(255,255,255,0.9);
+  border-bottom-color: rgba(255,255,255,0.3);
+}
+
+.message-bubble a:hover { opacity: 0.7; }
+
+/* ═══════════════════════════════════════════
+   CODE PREVIEW PANEL
+═══════════════════════════════════════════ */
+.preview-panel {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border-2);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
+  z-index: 1500;
+  display: none;
+  flex-direction: column;
+  height: 40vh;
+  min-height: 200px;
+  max-height: 80vh;
+  overflow: hidden;
+}
+
+.preview-panel.active { display: flex; animation: slideUpPanel 0.28s cubic-bezier(0.16,1,0.3,1); }
+
+@keyframes slideUpPanel {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.preview-drag {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  cursor: ns-resize;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 5;
+}
+
+.preview-drag-handle {
+  width: 32px; height: 3px;
+  background: var(--border-2);
+  border-radius: 2px;
+  transition: background 0.2s, width 0.2s;
+}
+
+.preview-drag:hover .preview-drag-handle { background: var(--accent); width: 48px; }
+
+.preview-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--base-1);
+  flex-shrink: 0;
+}
+
+[data-theme="light"] .preview-head { background: var(--surface-2); }
+
+.preview-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-1);
+  display: flex; align-items: center; gap: 6px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.preview-title .material-icons { font-size: 14px; color: var(--green); }
+.preview-acts { display: flex; gap: 5px; }
+
+.preview-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--ink-2);
+  padding: 3px 9px;
+  border-radius: var(--r-xs);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 3px;
+  transition: all 0.12s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.preview-btn:hover { background: var(--base-3); color: var(--ink-0); }
+.preview-btn .material-icons { font-size: 13px; }
+
+.preview-body { flex: 1; overflow: hidden; min-height: 0; }
+.preview-iframe { width: 100%; height: 100%; border: none; background: white; }
+
+/* ═══════════════════════════════════════════
+   LINK SAFETY MODAL
+═══════════════════════════════════════════ */
+.link-modal {
+  position: fixed; inset: 0;
+  background: rgba(12,14,18,0.7);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 8000;
+  padding: 20px;
+}
+
+.link-modal.active { display: flex; }
+
+[data-theme="light"] .link-modal { background: rgba(241,245,249,0.7); }
+
+.link-modal-card {
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-xl);
+  padding: 22px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: var(--shadow-overlay);
+  animation: cardIn 0.28s cubic-bezier(0.16,1,0.3,1);
+}
+
+.link-modal-head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.link-modal-head .material-icons { font-size: 18px; color: var(--accent); }
+.link-modal-head h3 { font-size: 14px; font-weight: 600; flex: 1; }
+
+.modal-close {
+  width: 26px; height: 26px;
+  background: var(--base-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xs);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.12s;
+  color: var(--ink-2);
+}
+.modal-close:hover { background: var(--red-soft); border-color: rgba(239,68,68,0.2); color: var(--red); }
+.modal-close .material-icons { font-size: 14px; }
+
+.link-url-display {
+  background: var(--base-2);
+  padding: 9px 11px;
+  border-radius: var(--r-sm);
+  margin-bottom: 14px;
+  word-break: break-all;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-2);
+  border: 1px solid var(--border);
+}
+
+.link-result-block {
+  padding: 13px;
+  border-radius: var(--r-sm);
+  margin-bottom: 14px;
+  display: flex; align-items: flex-start; gap: 10px;
+}
+
+.link-result-block.safe {
+  background: var(--green-soft);
+  border: 1px solid rgba(34,197,94,0.2);
+}
+
+.link-result-block.unsafe {
+  background: var(--red-soft);
+  border: 1px solid rgba(239,68,68,0.2);
+}
+
+.link-result-block .material-icons { font-size: 20px; flex-shrink: 0; }
+.link-result-block.safe .material-icons { color: var(--green); }
+.link-result-block.unsafe .material-icons { color: var(--red); }
+
+.link-result-body h4 { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.link-result-body p { font-size: 12px; color: var(--ink-2); line-height: 1.5; }
+
+.link-stats {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  display: flex; gap: 12px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+}
+
+.link-stat { display: flex; align-items: center; gap: 4px; color: var(--ink-2); }
+.link-stat .material-icons { font-size: 12px; }
+.link-stat.clean { color: var(--green); }
+.link-stat.malicious { color: var(--red); }
+
+.link-checking {
+  text-align: center;
+  padding: 20px;
+  color: var(--ink-2);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.link-modal-actions { display: flex; gap: 8px; }
+
+.link-btn {
+  flex: 1;
+  padding: 9px 12px;
+  border: none;
+  border-radius: var(--r-sm);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: all 0.15s;
+  letter-spacing: 0.2px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.link-btn.primary { background: var(--accent); color: #fff; }
+.link-btn.primary:hover { background: #2563eb; }
+.link-btn.secondary { background: var(--base-3); color: var(--ink-1); border: 1px solid var(--border); }
+.link-btn.secondary:hover { background: var(--base-4); }
+.link-btn:active { transform: scale(0.96); }
+.link-btn .material-icons { font-size: 15px; }
+
+/* ═══════════════════════════════════════════
+   MOBILE RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .topbar-brand { display: none; }
+  .topbar-menu-btn { display: flex; }
+  .channel-topic { display: none; }
+
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0;
+    width: min(var(--sidebar-w), 80vw);
+    height: 100dvh;
+    z-index: 500;
+    transform: translateX(-110%);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar.open { transform: translateX(0); }
+
+  .sidebar-overlay {
+    position: fixed; inset: 0;
+    background: rgba(12,14,18,0.6);
+    backdrop-filter: blur(3px);
+    z-index: 499;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s;
+  }
+
+  .sidebar-overlay.visible { opacity: 1; pointer-events: auto; }
+
+  .messages-container { padding: 12px 14px 6px; }
+  .chat-header { padding: 0 14px; }
+  .input-area { padding: 10px 12px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
+
+  .action-chip span:not(.material-icons) { display: none; }
+  .action-chip { padding: 4px 7px; }
+  .action-chip .material-icons { font-size: 14px; }
+
+  .toast { top: 64px; right: 10px; left: 10px; max-width: calc(100% - 20px); }
+
+  .message-content { max-width: 80%; }
+}
+
+@media (max-width: 480px) {
+  .conn-badge span:last-child { display: none; }
+  .message-content { max-width: 85%; }
+  .char-counter { display: none; }
+  .topbar-actions { padding: 0 10px; gap: 5px; }
+  .login-card { padding: 22px 20px; }
+}
+
+/* Landscape mobile */
+@media (max-width: 900px) and (max-height: 500px) {
+  .topbar { height: 44px; min-height: 44px; }
+  .chat-header { height: 38px; }
+  .messages-container { padding: 8px 12px; }
+  .input-area { padding: 8px 12px; }
+}
+
+/* iOS zoom fix */
+@supports (-webkit-touch-callout: none) {
+  input, textarea, select { font-size: 16px !important; }
+}
+
+/* Tap highlight */
+* { -webkit-tap-highlight-color: transparent; }
+
+/* Prevent zoom on input focus on iOS */
+input:focus, textarea:focus { transform: scale(1); }
+</style>
+</head>
+
+<body>
+<!-- Sidebar overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="app-shell">
+
+  <!-- ── TOP BAR ───────────────────────────────── -->
+  <header class="topbar">
+    <!-- Brand (desktop sidebar-aligned) -->
+    <div class="topbar-section topbar-brand">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 2H4C2.9 2 2 2.9 2 4v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">AADAmeet</span>
+        <span class="brand-sub">mqtt · ui/ux</span>
+      </div>
+    </div>
+
+    <!-- Mobile menu toggle -->
+    <button class="topbar-menu-btn" id="menuToggle" aria-label="Toggle sidebar">
+      <span class="material-icons">menu</span>
+    </button>
+
+    <!-- Channel info -->
+    <div class="topbar-section topbar-channel">
+      <div class="channel-info">
+        <span class="channel-hash">#</span>
+        <span class="channel-name">general</span>
+        <span class="channel-topic">Discussing Web UI/UX — Share ideas, critiques & code</span>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="topbar-section topbar-actions">
+      <div class="conn-badge" id="statusBadge">
+        <span class="conn-dot" id="statusDot"></span>
+        <span id="statusText">Offline</span>
+      </div>
+      <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+        <span class="material-icons">dark_mode</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── LOGIN SCREEN ──────────────────────────── -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-wrap">
+      <div class="login-brand">
+        <div class="login-logo">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 2H4C2.9 2 2 2.9 2 4v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+          </svg>
+        </div>
+        <div class="login-brand-text">
+          <span class="login-brand-name">AADAmeet</span>
+          <span class="login-brand-tag">real-time team workspace · mqtt</span>
+        </div>
+      </div>
+
+      <div class="login-card">
+        <div class="login-card-title">Connect to workspace</div>
+        <div class="login-card-sub">Enter your credentials to join the channel.</div>
+
+        <form id="loginForm" autocomplete="on">
+          <div class="field">
+            <label class="field-label" for="displayName">Display Name</label>
+            <div class="field-input-wrap">
+              <span class="material-icons field-icon" aria-hidden="true">person_outline</span>
+              <input type="text" id="displayName" name="displayName"
+                placeholder="Your name in chat"
+                autocomplete="name" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="username">Username</label>
+            <div class="field-input-wrap">
+              <span class="material-icons field-icon" aria-hidden="true">account_circle</span>
+              <input type="text" id="username" name="username"
+                placeholder="MQTT username"
+                autocomplete="username" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="password">Password</label>
+            <div class="field-input-wrap">
+              <span class="material-icons field-icon" aria-hidden="true">lock_outline</span>
+              <input type="password" id="password" name="password"
+                placeholder="MQTT password"
+                autocomplete="current-password" required>
+            </div>
+          </div>
+
+          <label class="remember-row">
+            <input type="checkbox" id="rememberMeCheck" class="remember-checkbox">
+            <span class="custom-checkbox"></span>
+            <span class="remember-label">Remember me on this device</span>
+          </label>
+
+          <button type="submit" class="login-btn" id="loginBtn">
+            <span class="material-icons">bolt</span>
+            Connect
+          </button>
+        </form>
+
+        <div class="login-footer-note">
+          <span class="material-icons">info_outline</span>
+          Connection uses WebSocket over TLS — end-to-end encrypted.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CHAT INTERFACE ───────────────────────── -->
+  <div class="app-body" id="chatInterface" style="display:none">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <!-- Current user -->
+      <div class="sidebar-self" id="sidebarUserCard">
+        <div class="self-avatar" id="sidebarUserAvatar">?</div>
+        <div class="self-name" id="sidebarUserName">—</div>
+        <div class="self-badge">you</div>
+      </div>
+
+      <!-- Members -->
+      <div class="sidebar-section-head">
+        <span class="sidebar-section-label">Members</span>
+        <span class="online-pill" id="onlineCount">0</span>
+      </div>
+
+      <div class="user-list" id="userList"></div>
+    </aside>
+
+    <!-- Chat area -->
+    <main class="chat-area">
+      <!-- Sub-header -->
+      <div class="chat-header">
+        <div class="chat-header-left">
+          <span class="material-icons">tag</span>
+          <span>hall/msg1</span>
+        </div>
+        <div class="chat-header-right">
+          <button class="action-chip" id="clearBtn" title="Clear messages">
+            <span class="material-icons">delete_sweep</span>
+            <span>Clear</span>
+          </button>
+          <button class="action-chip" id="notifBtn" title="Notifications">
+            <span class="material-icons" id="notifIcon">notifications</span>
+            <span>Notifs</span>
+          </button>
+          <button class="action-chip" id="rememberMeBtn" title="Remember Me">
+            <span class="material-icons" id="rememberMeIcon">bookmark_border</span>
+            <span>Remember</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="messages-container" id="messagesContainer"></div>
+
+      <!-- Input -->
+      <div class="input-area">
+        <!-- Formatting toolbar -->
+        <div class="input-toolbar" id="inputToolbar">
+          <button class="toolbar-btn" id="boldBtn" title="Bold">
+            <span class="material-icons">format_bold</span>
+          </button>
+          <button class="toolbar-btn" id="italicBtn" title="Italic">
+            <span class="material-icons">format_italic</span>
+          </button>
+          <button class="toolbar-btn" id="inlineCodeBtn" title="Inline code">
+            <span class="material-icons">code</span>
+          </button>
+          <div class="toolbar-sep"></div>
+          <button class="code-insert-btn" id="insertCodeBlockBtn">
+            <span class="material-icons">data_object</span>
+            Code Block
+          </button>
+        </div>
+
+        <div class="input-row">
+          <div class="input-wrapper-field">
+            <textarea
+              id="messageInput"
+              placeholder="Message #general  ·  Shift+Enter for new line"
+              rows="1"
+              aria-label="Message input"
+            ></textarea>
+            <span class="char-counter" id="charCounter"></span>
+          </div>
+          <button class="send-btn" id="sendBtn" aria-label="Send message">
+            <span class="material-icons">arrow_upward</span>
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+</div><!-- .app-shell -->
+
+<!-- ── CODE PREVIEW PANEL ─────────────────────── -->
+<div class="preview-panel" id="codePreviewPanel">
+  <div class="preview-drag" id="previewResizeHandle">
+    <div class="preview-drag-handle"></div>
+  </div>
+  <div class="preview-head">
+    <div class="preview-title">
+      <span class="material-icons">play_circle_outline</span>
+      Live Preview
+    </div>
+    <div class="preview-acts">
+      <button class="preview-btn" id="clearPreviewBtn">
+        <span class="material-icons">refresh</span>
+        <span>Clear</span>
+      </button>
+      <button class="preview-btn" id="closePreviewBtn">
+        <span class="material-icons">close</span>
+        <span>Close</span>
+      </button>
+    </div>
+  </div>
+  <div class="preview-body">
+    <iframe
+      id="previewIframe"
+      class="preview-iframe"
+      sandbox="allow-scripts allow-same-origin"
+      title="Code Preview">
+    </iframe>
+  </div>
+</div>
+
+<!-- ── LINK MODAL ─────────────────────────────── -->
+<div class="link-modal" id="linkModal" role="dialog" aria-modal="true">
+  <div class="link-modal-card" id="linkModalContent">
+    <div class="link-modal-head">
+      <span class="material-icons">shield</span>
+      <h3>Link Safety Check</h3>
+      <div class="modal-close" id="linkModalClose" role="button" tabindex="0" aria-label="Close">
+        <span class="material-icons">close</span>
+      </div>
+    </div>
+    <div id="linkModalBody"></div>
+  </div>
+</div>
+
+<!-- ── LOADING ────────────────────────────────── -->
+<div class="loading-overlay" id="loadingIndicator" role="status" aria-live="polite">
+  <div class="loading-card">
+    <div class="loader-ring"></div>
+    <div class="loader-text">Connecting</div>
+  </div>
+</div>
+
+<!-- ── SCRIPTS ────────────────────────────────── -->
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-css.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('🚀 AADAmeet initializing...');
+
+  // ── THEME ──────────────────────────────────────
+  const themeToggle = document.getElementById('themeToggle');
+  const themeIcon = themeToggle.querySelector('.material-icons');
+
+  const currentTheme = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  updateThemeIcon(currentTheme);
+
+  themeToggle.addEventListener('click', function() {
+    const theme = document.documentElement.getAttribute('data-theme');
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateThemeIcon(newTheme);
+    this.style.transform = 'rotate(180deg) scale(0.9)';
+    setTimeout(() => { this.style.transform = ''; }, 300);
+  });
+
+  function updateThemeIcon(theme) {
+    themeIcon.textContent = theme === 'dark' ? 'light_mode' : 'dark_mode';
+  }
+
+  // ── REMEMBER ME ────────────────────────────────
+  function saveCredentials(d, u, p) {
+    localStorage.setItem('rememberMe', 'true');
+    localStorage.setItem('savedDisplayName', d);
+    localStorage.setItem('savedUsername', u);
+    localStorage.setItem('savedPassword', p);
+  }
+
+  function clearSavedCredentials() {
+    ['rememberMe','savedDisplayName','savedUsername','savedPassword'].forEach(k => localStorage.removeItem(k));
+  }
+
+  function isRememberMeEnabled() { return localStorage.getItem('rememberMe') === 'true'; }
+
+  function updateRememberMeIcon() {
+    const icon = document.getElementById('rememberMeIcon');
+    const btn = document.getElementById('rememberMeBtn');
+    const on = isRememberMeEnabled();
+    if (icon) icon.textContent = on ? 'bookmark' : 'bookmark_border';
+    if (btn) {
+      btn.classList.toggle('active', on);
+    }
+  }
+
+  function attemptAutoLogin() {
+    if (!isRememberMeEnabled()) return;
+    const d = localStorage.getItem('savedDisplayName') || '';
+    const u = localStorage.getItem('savedUsername') || '';
+    const p = localStorage.getItem('savedPassword') || '';
+    if (!d || !u || !p) return;
+    document.getElementById('displayName').value = d;
+    document.getElementById('username').value = u;
+    document.getElementById('password').value = p;
+    document.getElementById('rememberMeCheck').checked = true;
+    connectToMQTT(d, u, p);
+  }
+
+  updateRememberMeIcon();
+
+  // ── CONFIG ─────────────────────────────────────
+  const BROKER = "wss://a8e22050b9054b32ab8a6ab0c505d814.s1.eu.hivemq.cloud:8884/mqtt";
+  const CHAT_TOPIC = "hall/msg1";
+  const PRESENCE_TOPIC = "hall/presence";
+  const TYPING_TOPIC = "hall/typing";
+  const DEBUG_MODE = true;
+
+  const API_CONFIG = {
+    baseUrl: 'https://pybackend-aadameet1.onrender.com',
+    endpoint: '/check-url',
+    method: 'POST'
+  };
+
+  // ── STATE ──────────────────────────────────────
+  let client = null;
+  let currentUser = null;
+  let users = new Map();
+  let typingUsers = new Set();
+  let typingTimeout = null;
+  let notificationsEnabled = true;
+  let lastSenderId = null;
+
+  // ── UTILITIES ──────────────────────────────────
+  function generateUserId() {
+    return 'u_' + Math.random().toString(36).substr(2, 9);
+  }
+
+  const AVATAR_COLORS = [
+    'linear-gradient(135deg,#0ea5e9,#2563eb)',
+    'linear-gradient(135deg,#8b5cf6,#7c3aed)',
+    'linear-gradient(135deg,#10b981,#059669)',
+    'linear-gradient(135deg,#f97316,#ea580c)',
+    'linear-gradient(135deg,#06b6d4,#0891b2)',
+    'linear-gradient(135deg,#ec4899,#db2777)',
+    'linear-gradient(135deg,#f59e0b,#d97706)',
+    'linear-gradient(135deg,#ef4444,#dc2626)'
+  ];
+
+  function generateColor(name) {
+    return AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length];
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function showToast(message, type = 'info') {
+    document.querySelectorAll('.toast').forEach(t => t.remove());
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    const icons = { error: 'error_outline', success: 'check_circle', info: 'info_outline', warn: 'warning_amber' };
+    toast.innerHTML = `<span class="material-icons">${icons[type] || 'info_outline'}</span><span>${message}</span>`;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(110%)';
+      toast.style.transition = 'all 0.25s ease';
+      setTimeout(() => toast.remove(), 250);
+    }, 3000);
+  }
+
+  function updateConnectionStatus(connected) {
+    const dot = document.getElementById('statusDot');
+    const text = document.getElementById('statusText');
+    const badge = document.getElementById('statusBadge');
+    badge.classList.toggle('online', connected);
+    text.textContent = connected ? 'Connected' : 'Offline';
+  }
+
+  function addSystemMessage(text) {
+    const container = document.getElementById('messagesContainer');
+    const el = document.createElement('div');
+    el.className = 'system-message';
+    el.innerHTML = `<span>${escapeHtml(text)}</span>`;
+    container.appendChild(el);
+    container.scrollTop = container.scrollHeight;
+    lastSenderId = null;
+  }
+
+  function addMessage(data, isOwn = false) {
+    const container = document.getElementById('messagesContainer');
+    const msgDiv = document.createElement('div');
+    const isSameAsPrevious = lastSenderId === data.userId;
+    msgDiv.className = `message ${isOwn ? 'own' : ''} ${!isSameAsPrevious ? 'spaced' : ''}`;
+    lastSenderId = data.userId;
+
+    const time = new Date(data.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    const messageText = linkifyMessage(data.message);
+    const avatarHidden = isSameAsPrevious ? 'hidden' : '';
+    const metaHidden = isSameAsPrevious ? 'style="display:none"' : '';
+
+    msgDiv.innerHTML = `
+      <div class="message-avatar ${avatarHidden}" style="background: ${data.color || (currentUser && currentUser.color)}">
+        ${isSameAsPrevious ? '' : (data.avatar || (currentUser && currentUser.avatar))}
+      </div>
+      <div class="message-content">
+        <div class="message-meta" ${metaHidden}>
+          <span class="message-sender">${isOwn ? (currentUser ? currentUser.name : 'You') : escapeHtml(data.name)}</span>
+          <span class="message-time">${time}</span>
+        </div>
+        <div class="message-bubble">${messageText}</div>
+      </div>
+    `;
+
+    container.appendChild(msgDiv);
+
+    if (typeof Prism !== 'undefined') {
+      msgDiv.querySelectorAll('code[class*="language-"]').forEach(b => Prism.highlightElement(b));
+    }
+
+    msgDiv.querySelectorAll('.message-bubble a.message-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        showLinkModal(this.getAttribute('href'));
+      });
+    });
+
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function linkifyMessage(text) {
+    const codeBlockMatch = text.match(/```(\w+)?\n?([\s\S]*?)```/);
+    if (codeBlockMatch) {
+      const lang = codeBlockMatch[1] || 'html';
+      const code = codeBlockMatch[2].trim();
+      return renderCodeBlock(lang, code);
+    }
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return escapeHtml(text).replace(urlRegex, url => `<a href="${url}" class="message-link">${url}</a>`);
+  }
+
+  function renderCodeBlock(lang, code) {
+    const codeId = 'code_' + Math.random().toString(36).substr(2, 9);
+    const escapedCode = escapeHtml(code);
+    const encodedCode = btoa(encodeURIComponent(code));
+    const icons = { html: 'html', markup: 'html', css: 'style', javascript: 'javascript', js: 'javascript' };
+    const icon = icons[lang] || 'code';
+    return `
+      <div class="code-block">
+        <div class="code-block-head">
+          <div class="code-lang-label">
+            <span class="material-icons">${icon}</span>
+            <span>${lang.toUpperCase()}</span>
+          </div>
+          <div class="code-block-actions">
+            <button class="code-btn" onclick="copyCode('${codeId}')">
+              <span class="material-icons">content_copy</span>
+              <span>Copy</span>
+            </button>
+            <button class="code-btn run" onclick="runCode('${encodedCode}')">
+              <span class="material-icons">play_arrow</span>
+              <span>Run</span>
+            </button>
+          </div>
+        </div>
+        <div class="code-block-body">
+          <pre><code id="${codeId}" class="language-${lang}">${escapedCode}</code></pre>
+        </div>
+      </div>`;
+  }
+
+  window.runCode = function(encodedCode) {
+    try {
+      const code = decodeURIComponent(atob(encodedCode));
+      const previewPanel = document.getElementById('codePreviewPanel');
+      const previewIframe = document.getElementById('previewIframe');
+      previewIframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;padding:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}</style></head><body>${code}</body></html>`;
+      previewPanel.classList.add('active');
+      showToast('Code executed', 'success');
+    } catch (e) {
+      showToast('Error running code', 'error');
+    }
+  };
+
+  window.copyCode = function(codeId) {
+    const el = document.getElementById(codeId);
+    navigator.clipboard.writeText(el.textContent)
+      .then(() => showToast('Copied to clipboard', 'success'))
+      .catch(() => showToast('Failed to copy', 'error'));
+  };
+
+  function updateUserList() {
+    const userList = document.getElementById('userList');
+    userList.innerHTML = '';
+    let onlineCount = 0;
+
+    users.forEach(user => {
+      if (user.online) onlineCount++;
+      const userDiv = document.createElement('div');
+      userDiv.className = 'user-item';
+      userDiv.innerHTML = `
+        <div class="user-avatar" style="background:${user.color}">
+          ${user.avatar}
+          <span class="user-presence ${user.online ? 'online' : ''}"></span>
+        </div>
+        <div class="user-info">
+          <div class="user-name">${escapeHtml(user.name)}</div>
+        </div>`;
+      userList.appendChild(userDiv);
+    });
+
+    document.getElementById('onlineCount').textContent = onlineCount;
+  }
+
+  // ── TOOLBAR FORMATTING ─────────────────────────
+  document.getElementById('boldBtn').addEventListener('click', () => wrapSelection('**', '**'));
+  document.getElementById('italicBtn').addEventListener('click', () => wrapSelection('_', '_'));
+  document.getElementById('inlineCodeBtn').addEventListener('click', () => wrapSelection('`', '`'));
+
+  document.getElementById('insertCodeBlockBtn').addEventListener('click', () => {
+    const input = document.getElementById('messageInput');
+    const template = '```html\n\n```';
+    const pos = input.selectionStart;
+    input.value = input.value.slice(0, pos) + template + input.value.slice(pos);
+    input.focus();
+    input.setSelectionRange(pos + 7, pos + 7);
+    input.dispatchEvent(new Event('input'));
+  });
+
+  function wrapSelection(before, after) {
+    const input = document.getElementById('messageInput');
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    const selected = input.value.slice(start, end);
+    const replacement = before + (selected || 'text') + after;
+    input.value = input.value.slice(0, start) + replacement + input.value.slice(end);
+    input.focus();
+    if (!selected) {
+      input.setSelectionRange(start + before.length, start + before.length + 4);
+    } else {
+      input.setSelectionRange(start + before.length, start + before.length + selected.length);
+    }
+    input.dispatchEvent(new Event('input'));
+  }
+
+  // ── LOGIN ───────────────────────────────────────
+  function connectToMQTT(displayName, username, password) {
+    if (typeof mqtt === 'undefined') {
+      showToast('MQTT library not loaded. Refresh the page.', 'error');
+      return;
+    }
+
+    if (DEBUG_MODE) {
+      console.log('=== AADAmeet Debug ===');
+      console.log('Broker:', BROKER);
+      console.log('Username:', username);
+      console.log('Display Name:', displayName);
+    }
+
+    const loginBtn = document.getElementById('loginBtn');
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<span class="material-icons">sync</span> Connecting...';
+    document.getElementById('loadingIndicator').classList.add('active');
+
+    currentUser = {
+      id: generateUserId(),
+      name: displayName,
+      avatar: displayName.charAt(0).toUpperCase(),
+      color: generateColor(displayName)
+    };
+
+    // Update sidebar user card
+    const selfCard = document.getElementById('sidebarUserCard');
+    const selfAvatar = document.getElementById('sidebarUserAvatar');
+    const selfName = document.getElementById('sidebarUserName');
+    selfAvatar.textContent = currentUser.avatar;
+    selfAvatar.style.background = currentUser.color;
+    selfName.textContent = currentUser.name;
+    selfCard.classList.add('visible');
+
+    const clientId = `teamchat_${currentUser.id}_${Date.now()}`;
+    if (DEBUG_MODE) console.log('Client ID:', clientId);
+
+    try {
+      client = mqtt.connect(BROKER, {
+        clientId,
+        username,
+        password,
+        keepalive: 60,
+        clean: true,
+        reconnectPeriod: 5000,
+        connectTimeout: 30000,
+        will: {
+          topic: PRESENCE_TOPIC,
+          payload: JSON.stringify({ userId: currentUser.id, name: currentUser.name, status: 'offline', timestamp: Date.now() }),
+          qos: 1,
+          retain: true
+        }
+      });
+
+      client.on('connect', handleConnect);
+      client.on('message', handleMessage);
+      client.on('error', handleError);
+      client.on('offline', handleOffline);
+      client.on('reconnect', handleReconnect);
+    } catch (error) {
+      console.error('❌ Connection error:', error);
+      showToast('Failed to connect: ' + error.message, 'error');
+      loginBtn.disabled = false;
+      loginBtn.innerHTML = '<span class="material-icons">bolt</span> Connect';
+      document.getElementById('loadingIndicator').classList.remove('active');
+    }
+  }
+
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const displayName = document.getElementById('displayName').value.trim();
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    if (!displayName || !username || !password) {
+      showToast('Please fill in all fields', 'error');
+      return;
+    }
+    const rememberMe = document.getElementById('rememberMeCheck').checked;
+    if (rememberMe) saveCredentials(displayName, username, password);
+    else clearSavedCredentials();
+    updateRememberMeIcon();
+    connectToMQTT(displayName, username, password);
+  });
+
+  function waitForMQTTAndAutoLogin() {
+    if (typeof mqtt !== 'undefined') attemptAutoLogin();
+    else setTimeout(waitForMQTTAndAutoLogin, 100);
+  }
+  waitForMQTTAndAutoLogin();
+
+  // ── MQTT HANDLERS ──────────────────────────────
+  function handleConnect() {
+    if (DEBUG_MODE) console.log('✅ Connected to MQTT broker');
+    document.getElementById('loadingIndicator').classList.remove('active');
+    updateConnectionStatus(true);
+    client.subscribe([CHAT_TOPIC, PRESENCE_TOPIC, TYPING_TOPIC], { qos: 1 });
+    publishPresence('online');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('chatInterface').style.display = 'flex';
+    addSystemMessage('Connected to AADAmeet ✓');
+    showToast('Connected successfully', 'success');
+    setTimeout(() => publishPresence('online'), 500);
+    requestNotificationPermission();
+  }
+
+  function handleMessage(topic, payload) {
+    try {
+      const data = JSON.parse(payload.toString());
+      if (DEBUG_MODE) console.log('Message on', topic, data);
+      if (topic === CHAT_TOPIC) handleChatMessage(data);
+      else if (topic === PRESENCE_TOPIC) handlePresence(data);
+      else if (topic === TYPING_TOPIC) handleTypingIndicator(data);
+    } catch (error) {
+      console.error('Error handling message:', error);
+    }
+  }
+
+  function handleChatMessage(data) {
+    if (data.userId === currentUser.id) return;
+    addMessage(data);
+    onNewIncomingMessage(data);
+  }
+
+  function handlePresence(data) {
+    if (data.userId === currentUser.id) return;
+    if (data.status === 'online') {
+      users.set(data.userId, {
+        id: data.userId,
+        name: data.name,
+        avatar: data.name.charAt(0).toUpperCase(),
+        color: generateColor(data.name),
+        online: true
+      });
+      addSystemMessage(`${data.name} joined`);
+    } else if (data.status === 'offline') {
+      const user = users.get(data.userId);
+      if (user) {
+        user.online = false;
+        addSystemMessage(`${data.name} left`);
+      }
+    }
+    updateUserList();
+  }
+
+  function handleTypingIndicator(data) {
+    if (data.userId === currentUser.id) return;
+    if (data.typing) typingUsers.add(data.userId);
+    else typingUsers.delete(data.userId);
+    updateTypingIndicator();
+  }
+
+  function handleError(error) {
+    console.error('❌ MQTT Error:', error);
+    document.getElementById('loadingIndicator').classList.remove('active');
+    const loginBtn = document.getElementById('loginBtn');
+    loginBtn.disabled = false;
+    loginBtn.innerHTML = '<span class="material-icons">bolt</span> Connect';
+    let msg = 'Connection error.';
+    if (error.message && error.message.includes('Connection refused')) msg = 'Invalid credentials or broker URL.';
+    else if (error.message && error.message.includes('timeout')) msg = 'Connection timeout. Check broker URL.';
+    else msg += ' Check console for details.';
+    showToast(msg, 'error');
+  }
+
+  function handleOffline() {
+    updateConnectionStatus(false);
+    showToast('Connection lost. Reconnecting...', 'error');
+  }
+
+  function handleReconnect() {
+    showToast('Reconnecting...', 'warn');
+  }
+
+  // ── MESSAGING ──────────────────────────────────
+  document.getElementById('sendBtn').addEventListener('click', sendMessage);
+
+  document.getElementById('messageInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  document.getElementById('messageInput').addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 140) + 'px';
+
+    const len = this.value.length;
+    const counter = document.getElementById('charCounter');
+    counter.textContent = len > 0 ? len : '';
+    counter.className = 'char-counter' + (len > 800 ? ' limit' : len > 600 ? ' warn' : '');
+
+    setTimeout(() => {
+      const container = document.getElementById('messagesContainer');
+      container.scrollTop = container.scrollHeight;
+    }, 100);
+    handleTyping();
+  });
+
+  document.getElementById('messageInput').addEventListener('focus', function() {
+    setTimeout(() => {
+      const container = document.getElementById('messagesContainer');
+      container.scrollTop = container.scrollHeight;
+      if (window.innerWidth <= 768) this.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+  });
+
+  function sendMessage() {
+    const input = document.getElementById('messageInput');
+    const message = input.value.trim();
+    if (!message || !client || !client.connected) {
+      if (!client || !client.connected) showToast('Not connected. Please wait...', 'error');
+      return;
+    }
+    const payload = {
+      userId: currentUser.id,
+      name: currentUser.name,
+      avatar: currentUser.avatar,
+      color: currentUser.color,
+      message,
+      timestamp: Date.now()
+    };
+    client.publish(CHAT_TOPIC, JSON.stringify(payload), { qos: 1 });
+    addMessage(payload, true);
+    input.value = '';
+    input.style.height = 'auto';
+    document.getElementById('charCounter').textContent = '';
+    document.getElementById('charCounter').className = 'char-counter';
+
+    const sendBtn = document.getElementById('sendBtn');
+    sendBtn.style.transform = 'scale(0.85)';
+    setTimeout(() => { sendBtn.style.transform = ''; }, 150);
+
+    publishTyping(false);
+    setTimeout(() => {
+      document.getElementById('messagesContainer').scrollTop = document.getElementById('messagesContainer').scrollHeight;
+    }, 50);
+  }
+
+  function handleTyping() {
+    if (!client || !client.connected) return;
+    publishTyping(true);
+    if (typingTimeout) clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => publishTyping(false), 3000);
+  }
+
+  function publishTyping(isTyping) {
+    if (!client || !client.connected) return;
+    client.publish(TYPING_TOPIC, JSON.stringify({
+      userId: currentUser.id, name: currentUser.name, typing: isTyping, timestamp: Date.now()
+    }), { qos: 0 });
+  }
+
+  function updateTypingIndicator() {
+    const container = document.getElementById('messagesContainer');
+    container.querySelector('.typing-indicator')?.remove();
+    if (typingUsers.size > 0) {
+      const userId = Array.from(typingUsers)[0];
+      const user = users.get(userId);
+      if (user) {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'typing-indicator';
+        typingDiv.innerHTML = `
+          <div class="message-avatar" style="background:${user.color}">${user.avatar}</div>
+          <div class="typing-bubble">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>`;
+        container.appendChild(typingDiv);
+        container.scrollTop = container.scrollHeight;
+      }
+    }
+  }
+
+  function publishPresence(status) {
+    if (!client || !client.connected || !currentUser) return;
+    client.publish(PRESENCE_TOPIC, JSON.stringify({
+      userId: currentUser.id, name: currentUser.name, status, timestamp: Date.now()
+    }), { qos: 1, retain: true });
+  }
+
+  // ── LINK MODAL ─────────────────────────────────
+  function showLinkModal(url) {
+    const modal = document.getElementById('linkModal');
+    const body = document.getElementById('linkModalBody');
+    modal.classList.add('active');
+    body.innerHTML = `
+      <div class="link-url-display">${escapeHtml(url)}</div>
+      <div class="link-checking">
+        <div class="loader-ring" style="margin-bottom:12px"></div>
+        <p>Checking link safety...</p>
+      </div>`;
+    checkLinkSafety(url);
+  }
+
+  function closeLinkModal() {
+    document.getElementById('linkModal').classList.remove('active');
+  }
+
+  function openLinkDirectly(url) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+    closeLinkModal();
+  }
+
+  async function checkLinkSafety(url) {
+    const body = document.getElementById('linkModalBody');
+    try {
+      const isValid = /^https?:\/\/.+/.test(url);
+      if (!isValid) { displayLinkResult(url, { status: 'invalid' }); return; }
+      const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoint}`, {
+        method: API_CONFIG.method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url })
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      displayLinkResult(url, data);
+    } catch (error) {
+      console.error('Link check error:', error);
+      body.innerHTML = `
+        <div class="link-url-display">${escapeHtml(url)}</div>
+        <div class="link-modal-actions">
+          <button class="link-btn secondary" id="cancelDirectBtn">
+            <span class="material-icons">close</span><span>Cancel</span>
+          </button>
+          <button class="link-btn primary" id="openDirectBtn">
+            <span class="material-icons">open_in_new</span><span>Open Anyway</span>
+          </button>
+        </div>`;
+      document.getElementById('cancelDirectBtn').addEventListener('click', closeLinkModal);
+      document.getElementById('openDirectBtn').addEventListener('click', () => openLinkDirectly(url));
+      showToast('Could not verify link safety', 'warn');
+    }
+  }
+
+  function displayLinkResult(url, data) {
+    const body = document.getElementById('linkModalBody');
+    const stats = data.stats || null;
+    const isSafe = data.status === 'safe' || data.status === 'clean';
+
+    if (isSafe) {
+      body.innerHTML = `
+        <div class="link-url-display">${escapeHtml(url)}</div>
+        <div class="link-result-block safe">
+          <span class="material-icons">verified_user</span>
+          <div class="link-result-body">
+            <h4>Link appears safe</h4>
+            <p>No threats detected by our security check.</p>
+            ${stats ? `<div class="link-stats">
+              <div class="link-stat clean"><span class="material-icons">check_circle</span><span>${stats.harmless || 0} Clean</span></div>
+              <div class="link-stat"><span class="material-icons">shield</span><span>${stats.undetected || 0} Undetected</span></div>
+            </div>` : ''}
+          </div>
+        </div>
+        <div class="link-modal-actions">
+          <button class="link-btn secondary" id="cancelSafeBtn"><span class="material-icons">close</span><span>Cancel</span></button>
+          <button class="link-btn primary" id="openSafeBtn"><span class="material-icons">open_in_new</span><span>Open Link</span></button>
+        </div>`;
+      document.getElementById('cancelSafeBtn').addEventListener('click', closeLinkModal);
+      document.getElementById('openSafeBtn').addEventListener('click', () => openLinkDirectly(url));
+      showToast('Link verified safe', 'success');
+    } else {
+      body.innerHTML = `
+        <div class="link-url-display">${escapeHtml(url)}</div>
+        <div class="link-result-block unsafe">
+          <span class="material-icons">warning</span>
+          <div class="link-result-body">
+            <h4>Warning: Potentially Unsafe</h4>
+            <p>${data.status === 'invalid' ? 'This link has an invalid format.' : 'This link may be unsafe to open.'}</p>
+            ${stats ? `<div class="link-stats">
+              <div class="link-stat malicious"><span class="material-icons">dangerous</span><span>${stats.malicious || 0} Malicious</span></div>
+              <div class="link-stat"><span class="material-icons">warning</span><span>${stats.suspicious || 0} Suspicious</span></div>
+            </div>` : ''}
+          </div>
+        </div>
+        <div class="link-modal-actions">
+          <button class="link-btn primary" id="closeUnsafeBtn"><span class="material-icons">close</span><span>Close</span></button>
+        </div>`;
+      document.getElementById('closeUnsafeBtn').addEventListener('click', closeLinkModal);
+      showToast('Link flagged as unsafe!', 'error');
+    }
+  }
+
+  // ── UI CONTROLS ────────────────────────────────
+  document.getElementById('menuToggle').addEventListener('click', function() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const isOpen = sidebar.classList.toggle('open');
+    overlay.classList.toggle('visible', isOpen);
+  });
+
+  document.getElementById('sidebarOverlay').addEventListener('click', function() {
+    document.getElementById('sidebar').classList.remove('open');
+    this.classList.remove('visible');
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', function() {
+    if (confirm('Clear all messages?')) {
+      document.getElementById('messagesContainer').innerHTML = '';
+      lastSenderId = null;
+      addSystemMessage('Chat cleared');
+      showToast('Chat history cleared', 'success');
+    }
+  });
+
+  document.getElementById('rememberMeBtn').addEventListener('click', function() {
+    if (isRememberMeEnabled()) {
+      clearSavedCredentials();
+      showToast('Remember Me disabled', 'info');
+    } else {
+      if (currentUser) {
+        const u = localStorage.getItem('savedUsername') || '';
+        const p = localStorage.getItem('savedPassword') || '';
+        saveCredentials(currentUser.name, u, p);
+      }
+      showToast('Remember Me enabled', 'success');
+    }
+    updateRememberMeIcon();
+  });
+
+  document.getElementById('notifBtn').addEventListener('click', async function() {
+    if (!notificationsEnabled) {
+      // Turning ON — request permission if needed
+      if ('Notification' in window && Notification.permission === 'default') {
+        const perm = await Notification.requestPermission();
+        if (perm !== 'granted') {
+          showToast('Permission denied — notifications blocked', 'error');
+          return;
+        }
+      }
+      if ('Notification' in window && Notification.permission === 'denied') {
+        showToast('Notifications blocked by browser — check site settings', 'error');
+        return;
+      }
+      notificationsEnabled = true;
+    } else {
+      notificationsEnabled = false;
+    }
+    const icon = document.getElementById('notifIcon');
+    icon.textContent = notificationsEnabled ? 'notifications' : 'notifications_off';
+    this.classList.toggle('active', notificationsEnabled);
+    this.style.color = notificationsEnabled ? '' : 'var(--red)';
+    this.style.borderColor = notificationsEnabled ? '' : 'rgba(239,68,68,0.2)';
+    showToast(`Notifications ${notificationsEnabled ? 'enabled' : 'disabled'}`, notificationsEnabled ? 'success' : 'info');
+  });
+
+  // ── NOTIFICATION + TAB BADGE SYSTEM ───────────
+
+  // Unread counter state
+  let unreadCount = 0;
+  const BASE_TITLE = document.title;
+  let faviconCanvas, faviconCtx, faviconLink;
+
+  // Build a dynamic favicon using canvas
+  function initFavicon() {
+    faviconLink = document.querySelector("link[rel~='icon']");
+    if (!faviconLink) {
+      faviconLink = document.createElement('link');
+      faviconLink.rel = 'icon';
+      document.head.appendChild(faviconLink);
+    }
+    faviconCanvas = document.createElement('canvas');
+    faviconCanvas.width = 32;
+    faviconCanvas.height = 32;
+    faviconCtx = faviconCanvas.getContext('2d');
+    renderFavicon(0);
+  }
+
+  function renderFavicon(count) {
+    const ctx = faviconCtx;
+    const size = 32;
+    ctx.clearRect(0, 0, size, size);
+
+    // Base icon — filled chat bubble (rounded rect, manual for compat)
+    const accent = getComputedStyle(document.documentElement)
+      .getPropertyValue('--accent').trim() || '#3b82f6';
+    ctx.fillStyle = accent;
+    ctx.beginPath();
+    const [rx, ry, rw, rh, rr] = [2, 2, 24, 20, 4];
+    ctx.moveTo(rx + rr, ry);
+    ctx.lineTo(rx + rw - rr, ry);
+    ctx.quadraticCurveTo(rx + rw, ry, rx + rw, ry + rr);
+    ctx.lineTo(rx + rw, ry + rh - rr);
+    ctx.quadraticCurveTo(rx + rw, ry + rh, rx + rw - rr, ry + rh);
+    ctx.lineTo(rx + rr, ry + rh);
+    ctx.quadraticCurveTo(rx, ry + rh, rx, ry + rh - rr);
+    ctx.lineTo(rx, ry + rr);
+    ctx.quadraticCurveTo(rx, ry, rx + rr, ry);
+    ctx.closePath();
+    ctx.fill();
+    // tail
+    ctx.beginPath();
+    ctx.moveTo(6, 22); ctx.lineTo(2, 28); ctx.lineTo(14, 22);
+    ctx.fill();
+
+    // Three dots inside bubble
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    [8, 14, 20].forEach(x => {
+      ctx.beginPath();
+      ctx.arc(x, 12, 2, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // Badge circle + number
+    if (count > 0) {
+      const label = count > 99 ? '99+' : String(count);
+      const bx = 22, by = 22, br = 9;
+
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.arc(bx, by, br, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#fff';
+      ctx.font = `bold ${label.length > 2 ? 7 : 9}px Arial`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, bx, by + 0.5);
+    }
+
+    faviconLink.href = faviconCanvas.toDataURL('image/png');
+  }
+
+  function setUnreadCount(n) {
+    unreadCount = Math.max(0, n);
+    // Tab title
+    document.title = unreadCount > 0 ? `(${unreadCount}) ${BASE_TITLE}` : BASE_TITLE;
+    // Favicon badge
+    renderFavicon(unreadCount);
+  }
+
+  function incrementUnread() {
+    setUnreadCount(unreadCount + 1);
+  }
+
+  function clearUnread() {
+    setUnreadCount(0);
+  }
+
+  // Clear badge when user returns to the tab
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      clearUnread();
+      if (client && client.connected) publishPresence('online');
+    }
+  });
+
+  // Also clear when window is focused
+  window.addEventListener('focus', clearUnread);
+
+  // ── NOTIFICATION SOUND ─────────────────────────
+  // Warm two-tone chime — pleasant, not alarming
+  function playNotificationSound() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+      function tone(freq, startTime, duration, gain) {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        g.gain.setValueAtTime(0, startTime);
+        g.gain.linearRampToValueAtTime(gain, startTime + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+        osc.start(startTime);
+        osc.stop(startTime + duration);
+      }
+
+      const now = ctx.currentTime;
+      tone(660, now, 0.18, 0.08);       // first note
+      tone(880, now + 0.12, 0.22, 0.06); // second note (higher, softer)
+    } catch (e) { /* AudioContext not available */ }
+  }
+
+  // ── BROWSER NOTIFICATION ───────────────────────
+  function showBrowserNotification(title, body) {
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+    try {
+      const n = new Notification(`AADAmeet · ${title}`, {
+        body: body.length > 80 ? body.slice(0, 80) + '…' : body,
+        icon: faviconCanvas ? faviconCanvas.toDataURL() : undefined,
+        tag: 'aadameet-msg', // replaces previous notification rather than stacking
+        renotify: true,
+        silent: true // we handle sound ourselves
+      });
+      n.addEventListener('click', () => { window.focus(); n.close(); });
+      setTimeout(() => n.close(), 6000);
+    } catch (e) {}
+  }
+
+  // ── UNIFIED NEW-MESSAGE HANDLER ─────────────────
+  function onNewIncomingMessage(data) {
+    const isHidden = document.hidden || !document.hasFocus();
+
+    // Always increment badge when tab is not focused
+    if (isHidden) incrementUnread();
+
+    if (notificationsEnabled) {
+      // Sound — always play when notifications on
+      playNotificationSound();
+      // Browser notification — only when tab hidden
+      if (isHidden) showBrowserNotification(data.name, data.message);
+    }
+  }
+
+  // ── INITIAL PERMISSION REQUEST ─────────────────
+  // Ask on connect (after user gesture), not on page load
+  function requestNotificationPermission() {
+    if (!('Notification' in window)) return;
+    if (Notification.permission === 'default') {
+      Notification.requestPermission().then(perm => {
+        if (perm === 'granted') {
+          showToast('Browser notifications enabled', 'success');
+        }
+      });
+    }
+  }
+
+  initFavicon();
+
+  // Link modal controls
+  document.getElementById('linkModalClose').addEventListener('click', closeLinkModal);
+  document.getElementById('linkModal').addEventListener('click', function(e) {
+    if (e.target === this) closeLinkModal();
+  });
+
+  // Preview panel controls
+  document.getElementById('closePreviewBtn').addEventListener('click', () => {
+    document.getElementById('codePreviewPanel').classList.remove('active');
+  });
+
+  document.getElementById('clearPreviewBtn').addEventListener('click', () => {
+    document.getElementById('previewIframe').srcdoc = '';
+    showToast('Preview cleared', 'info');
+  });
+
+  // Preview resize
+  const previewPanel = document.getElementById('codePreviewPanel');
+  const resizeHandle = document.getElementById('previewResizeHandle');
+  let isResizing = false, startY = 0, startHeight = 0;
+
+  resizeHandle.addEventListener('mousedown', e => {
+    isResizing = true;
+    startY = e.clientY;
+    startHeight = previewPanel.offsetHeight;
+    document.body.style.cursor = 'ns-resize';
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+
+  resizeHandle.addEventListener('touchstart', e => {
+    isResizing = true;
+    startY = e.touches[0].clientY;
+    startHeight = previewPanel.offsetHeight;
+    e.preventDefault();
+  }, { passive: false });
+
+  document.addEventListener('mousemove', e => {
+    if (!isResizing) return;
+    const newH = Math.max(200, Math.min(startHeight + (startY - e.clientY), window.innerHeight * 0.8));
+    previewPanel.style.height = newH + 'px';
+  });
+
+  document.addEventListener('touchmove', e => {
+    if (!isResizing) return;
+    const newH = Math.max(150, Math.min(startHeight + (startY - e.touches[0].clientY), window.innerHeight * 0.7));
+    previewPanel.style.height = newH + 'px';
+  }, { passive: false });
+
+  document.addEventListener('mouseup', () => {
+    if (isResizing) { isResizing = false; document.body.style.cursor = ''; document.body.style.userSelect = ''; }
+  });
+
+  document.addEventListener('touchend', () => { if (isResizing) isResizing = false; });
+
+  // Visibility and focus handled inside notification system above
+
+  // Unload
+  window.addEventListener('beforeunload', () => {
+    if (client && client.connected) { publishPresence('offline'); client.end(); }
+  });
+
+  // Resize handler
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      const mc = document.getElementById('messagesContainer');
+      if (mc && document.getElementById('chatInterface').style.display !== 'none') {
+        mc.scrollTop = mc.scrollHeight;
+      }
+    }, 100);
+  });
+
+  // Prevent double-tap zoom
+  let lastTouch = 0;
+  document.addEventListener('touchend', e => {
+    const now = Date.now();
+    if (now - lastTouch <= 300) e.preventDefault();
+    lastTouch = now;
+  }, { passive: false });
+
+  console.log('✅ AADAmeet ready');
+});
+</script>
+</body>
+</html>
