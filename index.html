@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#3f8f86">
 <meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>AADAmeet · Discussion Lab</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&family=Material+Icons+Round&display=swap" rel="stylesheet">
 <style>
@@ -64,6 +65,54 @@ input:focus{outline:0;border-color:var(--acc)}
 .cta{width:100%;padding:14px;border-radius:99px;background:var(--acc);color:#fff;font-weight:800;font-size:16px}
 .cta:disabled{opacity:.6}
 .fine{margin-top:16px;text-align:center;font-size:12.5px;color:var(--mute)}
+/* chat-type chooser */
+.pick .card{padding-bottom:22px}
+.pick .sub{margin-bottom:18px}
+.pk{display:flex;align-items:center;gap:14px;width:100%;padding:12px 14px;margin-bottom:10px;border-radius:24px;background:var(--bg);text-align:left;transition:transform .12s}
+.pk:active{transform:scale(.98)}
+.pk:hover{box-shadow:inset 0 0 0 1.5px var(--acc)}
+.pk>.mi{width:48px;height:48px;border-radius:17px;background:var(--acc);color:#fff;display:grid;place-items:center;font-size:25px;flex:none}
+.pk>.av{width:48px;height:48px;font-size:18px}
+.pk.on>.av::after{content:"";position:absolute;right:-1px;bottom:-1px;width:12px;height:12px;border-radius:50%;background:#3fae6a;border:2.5px solid var(--bg)}
+.pk.off{opacity:.6}
+.pk>span:not(.mi){flex:1;min-width:0;font-weight:800;font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pk small{display:block;color:var(--mute);font-weight:600;font-size:12.5px;white-space:normal}
+.plist{max-height:44dvh;overflow:auto;margin:0 -4px;padding:0 4px}
+.pback{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:4px;padding:11px;border-radius:99px;font-weight:800;color:var(--mute)}
+.pback:hover{background:var(--line);color:var(--ink)}
+.sh .ib{margin-left:auto}
+.pkgap{display:none}
+@media(max-width:899px){
+html,body{overscroll-behavior:none}
+.pick{padding:0;place-items:stretch;background:var(--bg)}
+.pick .card{width:100%;border-radius:0;box-shadow:none;background:var(--bg);display:flex;flex-direction:column;padding:calc(40px + var(--sat)) 24px calc(24px + var(--sab));animation:fade .2s}
+.pick .logo{width:72px;height:72px;border-radius:25px;margin-bottom:26px}
+.pick .logo .mi{font-size:36px}
+.pick h1{font-size:36px}
+.pick .sub{font-size:16px;margin-bottom:22px}
+.pkgap{display:block;flex:1}
+.pk{padding:16px;border-radius:28px;background:var(--panel);box-shadow:0 1px 2px var(--line)}
+.pk>.mi,.pk>.av{width:56px;height:56px}
+.pk>.mi{border-radius:20px;font-size:28px}
+.pk>.av{font-size:20px}
+.pk>span:not(.mi){font-size:18px}
+.pk small{font-size:13.5px}
+.pk.on>.av::after{border-color:var(--panel)}
+.plist{flex:1;max-height:none;min-height:0}
+.pback{margin-top:8px;padding:14px}
+.app.on{animation:fade .2s}
+.login{padding:0;place-items:stretch;background:var(--bg)}
+.login .card{width:100%;border-radius:0;box-shadow:none;background:var(--bg);display:flex;flex-direction:column;padding:calc(40px + var(--sat)) 24px calc(24px + var(--sab));animation:fade .2s}
+.login .logo{width:72px;height:72px;border-radius:25px;margin-bottom:26px}
+.login .logo .mi{font-size:36px}
+.login h1{font-size:36px}
+.login .sub{font-size:16px;margin-bottom:26px}
+.login label{font-size:14px;margin-bottom:16px}
+.login input:not([type=checkbox]){background:var(--panel);padding:16px 18px;border-radius:20px;box-shadow:0 1px 2px var(--line)}
+.login .err{margin-top:auto;padding-top:8px}
+.login .cta{padding:17px;font-size:17px}
+.login .fine{margin-top:14px}}
+@media(pointer:coarse){.b{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.b pre,.b code{-webkit-user-select:text;user-select:text}}
 /* app */
 .app{display:none;height:100dvh;max-width:1180px;margin:0 auto}
 .app.on{display:flex}
@@ -148,7 +197,7 @@ code{font-family:'JetBrains Mono',monospace;font-size:.86em;background:var(--lin
  <form class="card" id="form">
   <div class="logo"><span class="mi">forum</span></div>
   <h1>AADAmeet</h1>
-  <p class="sub">A private lab to talk, code and quick experiments.</p>
+  <p class="sub">A private lab for design talk, code and quick experiments.</p>
   <label>Your name<input id="dn" maxlength="24" autocomplete="nickname" placeholder="What should the lab call you?" required></label>
   <label>Username<input id="un" autocomplete="username" required></label>
   <label>Password<span class="pw"><input id="pw" type="password" autocomplete="current-password" required><button type="button" class="ib eye" id="eye" aria-label="Show password"><span class="mi">visibility</span></button></span></label>
@@ -160,9 +209,13 @@ code{font-family:'JetBrains Mono',monospace;font-size:.86em;background:var(--lin
  </form>
 </div>
 
+<div class="login pick" id="pick" style="display:none">
+ <div class="card" id="pickc"></div>
+</div>
+
 <div class="app" id="app">
  <aside class="side" id="side">
-  <div class="sh"><div class="logo"><span class="mi">forum</span></div><div><b>AADAmeet</b><small id="cnt">0 online</small></div></div>
+  <div class="sh"><div class="logo"><span class="mi">forum</span></div><div><b>Discussion Lab</b><small id="cnt">0 online</small></div><button class="ib" id="home" aria-label="Change chat type" title="Change chat type"><span class="mi">swap_horiz</span></button></div>
   <div class="mem" id="mem"></div>
   <div class="sf">
    <button id="bell"><span class="mi">notifications_active</span>Alerts</button>
@@ -173,6 +226,7 @@ code{font-family:'JetBrains Mono',monospace;font-size:.86em;background:var(--lin
  <div class="scrim" id="scrim"></div>
  <main class="main">
   <header class="top">
+   <button class="ib" id="back" aria-label="Back to chat types" title="Back"><span class="mi">arrow_back</span></button>
    <button class="ib only-m" id="menu" aria-label="Members"><span class="mi">groups</span></button>
    <div class="ttl"><b id="tt">Discussion Lab</b><small><i class="dot" id="dot"></i><span id="sub">Connecting…</span></small></div>
    <button class="ib" id="clear" aria-label="Clear my view" title="Clear my view"><span class="mi">cleaning_services</span></button>
@@ -235,7 +289,7 @@ async function connect(name,user,pass){
  me={name};$('#err').textContent='';$('#go').disabled=true;$('#go').textContent='Connecting…';
  try{if(crypto.subtle){await initKeys();const rk=$('#rk').value;rkey=rk?await roomKey(rk):null}}catch{}
  const c=client=mqtt.connect(CFG.broker,{clientId:'aada_'+myId+'_'+Math.random().toString(16).slice(2,6),username:user,password:pass,keepalive:60,clean:true,reconnectPeriod:3000,connectTimeout:15000,
-  will:{topic:CFG.pres+myId,payload:JSON.stringify({userId:myId,name,status:'offline',timestamp:Date.now()}),qos:1,retain:true}});
+  will:{topic:CFG.pres+myId,payload:JSON.stringify({userId:myId,name,status:'offline',k:myPub,timestamp:Date.now()}),qos:1,retain:true}});
  c.on('connect',()=>c===client&&onConnect());c.on('message',onMsg);
  c.on('error',e=>{if(entered||c!==client)return;const k=e.code,m=e.message||'';fail([4,5,134,135].includes(k)||/not authorized|bad user/i.test(m)?'The broker rejected this username or password.':'Could not connect: '+(m||'network error')+'.')});
  c.on('reconnect',()=>setConn(false));c.on('close',()=>setConn(false));
@@ -243,12 +297,47 @@ async function connect(name,user,pass){
 }
 function setConn(ok){$('#dot').classList.toggle('ok',ok);ok?updSub():$('#sub').textContent=entered?'Reconnecting…':'Connecting…'}
 function onConnect(){
- setConn(true);client.subscribe([CFG.chat,CFG.typ,CFG.pres+'+',CFG.dm+myId,CFG.chat+'/r/+',CFG.ev,CFG.pin],{qos:1});pub('online');
+ setConn(true);client.subscribe([CFG.chat,CFG.typ,CFG.pres+'+',CFG.dm+myId+'/+/+',CFG.chat+'/r/+',CFG.ev,CFG.pin],{qos:1});pub('online');
  if(entered)return;entered=true;clearTimeout(tmo);saveCred();
- $('#login').style.display='none';$('#app').classList.add('on');
- hist.forEach(m=>seen.add(m.id));openThread('lab');
- sys('You joined the lab');setTimeout(flush,1800);renderMembers();bellUI();
+ $('#login').style.display='none';
+ hist.forEach(m=>seen.add(m.id));showPick();
+ setTimeout(flush,1800);renderMembers();bellUI();
 }
+/* chat-type chooser: group or private, shown after login and from the sidebar's swap button */
+let pickOn=false,pickStep='home',joinedShown=false;
+const lead=n=>{const s=document.createElement('span');s.className='mi';s.textContent=n;return s};
+function choice(ld,title,desc,n,fn,cls){
+ const b=document.createElement('button');b.type='button';b.className='pk'+(cls?' '+cls:'');
+ const w=document.createElement('span'),s=document.createElement('small');w.textContent=title;s.textContent=desc;w.append(s);
+ b.append(ld,w);if(n)b.append(el('bd',n));b.onclick=fn;return b}
+function showPick(step){
+ popClose?.();stopTyping();setCtx(null);cur='';pickStep=step||'home';pickOn=true;drawer(false);
+ $('#app').classList.remove('on');$('#pick').style.display='';renderPick()}
+function enterThread(id){
+ pickOn=false;$('#pick').style.display='none';$('#app').classList.add('on');openThread(id);
+ if(!history.state?.aadaChat){try{history.pushState({aadaChat:1},'')}catch{}}
+ if(id==='lab'&&!joinedShown){joinedShown=true;sys('You joined the lab')}}
+function renderPick(){
+ if(!pickOn)return;const c=$('#pickc');c.replaceChildren();
+ const lg=el('logo'),h=document.createElement('h1'),sb=el('sub');lg.innerHTML='<span class="mi">forum</span>';c.append(lg,h,sb);
+ if(pickStep==='home'){
+  const online=[...users.values()].filter(u=>u.online).length+1,dmUnread=Object.entries(unr).reduce((a,[k,v])=>k==='lab'?a:a+v,0);
+  h.textContent='Hi, '+me.name.split(/\s+/)[0];sb.textContent='What kind of chat do you want?';
+  c.append(el('pkgap'),
+   choice(lead('groups'),'Group chat','Everyone in the lab · '+online+' online',unr.lab,()=>enterThread('lab')),
+   choice(lead('lock'),'Private chat','One to one · only the two of you can read it',dmUnread,()=>{pickStep='dm';renderPick()}))}
+ else{
+  h.textContent='Private chat';sb.textContent='Pick someone to message.';
+  const others=[...users].map(([id,u])=>({id,...u})).sort((a,b)=>(b.online-a.online)||a.name.localeCompare(b.name)),box=el('plist');
+  if(!others.length)box.append(el('sub','Nobody else has joined yet. People show up here as they arrive.'));
+  others.forEach(u=>{const a=el('av',ini(u.name));a.style.background=color(u.name);
+   box.append(choice(a,u.name,u.online?'Online':'Away',unr[u.id],()=>enterThread(u.id),u.online?'on':'off'))});
+  const back=document.createElement('button');back.type='button';back.className='pback';back.innerHTML='<span class="mi">arrow_back</span>';back.append('Back');back.onclick=()=>{pickStep='home';renderPick()};
+  c.append(box,back)}}
+/* back to the chooser: the header arrow, the sidebar swap button and the phone's back gesture all end up in showPick() */
+function leaveThread(){if(history.state?.aadaChat)history.back();else showPick()}
+$('#back').onclick=leaveThread;$('#home').onclick=leaveThread;
+addEventListener('popstate',()=>{if(entered&&!pickOn)showPick()});
 const empty=()=>{const d=el('empty');d.id='empty';d.innerHTML='<span class="mi">science</span><b>The lab is quiet</b><br>Start a thread, share a mockup idea or drop a code snippet.';list.append(d)};
 const pub=s=>client?.connected&&client.publish(CFG.pres+myId,JSON.stringify({userId:myId,name:me.name,status:s,k:myPub,timestamp:Date.now()}),{qos:1,retain:true});
 
@@ -260,20 +349,30 @@ async function unpack(d,key){
  if(typeof t!=='string')return null;
  if(t.startsWith('::rp::')){try{const o=JSON.parse(t.slice(6));t=String(o.m);r=cleanR(o.r)}catch{}}
  return{id:String(d.id||d.userId+d.timestamp).replace(/[^\w-]/g,'_').slice(0,60),userId:d.userId.slice(0,40),name:d.name.slice(0,24)||'Guest',message:t.slice(0,CFG.max),timestamp:Number(d.timestamp)||Date.now(),q:Number(d.q)||0,bad,ed:d.ed?1:0,r}}
+/* private mailbox: hall/dm/<to>/<from>/<slot>, retained (last 5 per sender) so offline people get messages on return; cleared once delivered */
+let pendingDm=[];
+const clearSlot=t=>{if(client?.connected)client.publish(t,'',{qos:1,retain:true})};
+function retryDm(id){if(!pendingDm.length)return;const q=pendingDm.filter(x=>x.from===id);pendingDm=pendingDm.filter(x=>x.from!==id);q.forEach(x=>onMsg(x.topic,x.buf))}
 async function onMsg(topic,buf){
  if(topic.startsWith(CFG.file))return onChunk(topic,buf.toString());
  let d;try{d=JSON.parse(buf.toString())}catch{return}
  if(topic===CFG.ev)return onEv(d);if(topic===CFG.pin)return onPin(d);
- if(topic.startsWith(CFG.chat)||topic===CFG.dm+myId){const dm=topic===CFG.dm+myId;if(!d||seen.has(String(d.id)))return;
-  const m=await unpack(d,dm?await peerKey(d.userId):rkey);if(!m||seen.has(m.id))return;
+ const dmT=topic.startsWith(CFG.dm+myId+'/');
+ if(topic.startsWith(CFG.chat)||dmT){const dm=dmT;if(!d)return;if(seen.has(String(d.id))){if(dm)clearSlot(topic);return}
+  const k=dm?await peerKey(d.userId):rkey;
+  if(dm&&!k){if(typeof d.userId==='string'&&pendingDm.length<50)pendingDm.push({from:d.userId,topic,buf});return}
+  const m=await unpack(d,k);
+  if(dm&&(!m||m.bad)){clearSlot(topic);return}
+  if(!m||seen.has(m.id))return;
   if(m.q>seq)seq=m.q;
-  if(!dm&&!ready){if(m.bad)skipped++;else{seen.add(m.id);backlog.push(m)}return}
-  seen.add(m.id);m.th=dm?m.userId:'lab';if(!m.bad)store(m);
+  m.th=dm?m.userId:'lab';
+  if(!ready){if(m.bad)skipped++;else{seen.add(m.id);backlog.push(m);if(dm)clearSlot(topic)}return}
+  seen.add(m.id);if(!m.bad)store(m);if(dm)clearSlot(topic);
   if(m.th===cur)add(m,m.userId===myId);else{unr[m.th]=(unr[m.th]||0)+1;renderMembers()}
   if(m.userId!==myId)notify(m)}
  else if(topic.startsWith(CFG.pres)){if(!d||typeof d.userId!=='string'||typeof d.name!=='string')return;
   const id=d.userId.slice(0,40),on=d.status==='online',prev=users.get(id);
-  if(id!==myId){users.set(id,{name:d.name.slice(0,24),online:on,k:d.k||prev?.k});if(ready&&(!prev||prev.online!==on))sys(`${d.name.slice(0,24)} ${on?'joined':'left'}`)}
+  if(id!==myId){users.set(id,{name:d.name.slice(0,24),online:on,k:d.k||prev?.k});if(d.k)retryDm(id);if(ready&&(!prev||prev.online!==on))sys(`${d.name.slice(0,24)} ${on?'joined':'left'}`)}
   renderMembers()}
  else if(topic===CFG.typ){if(!d||d.userId===myId||typeof d.name!=='string')return;
   clearTimeout(typers.get(d.userId)?.t);
@@ -287,8 +386,8 @@ function renderMembers(){
  const g=el('m'+(cur==='lab'?' cur':'')),ga=el('av','#'),gw=document.createElement('span'),gs=document.createElement('small');ga.style.background='var(--acc)';gw.textContent='Group chat';gs.textContent='Everyone in the lab';gw.append(gs);g.append(ga,gw);if(unr.lab)g.append(el('bd',unr.lab));g.onclick=()=>openThread('lab');box.append(g);
  all.forEach(u=>{if(u.online)c++;const r=el('m'+(u.online?' on':' off'));const a=el('av',ini(u.name));a.style.background=color(u.name);
   const w=document.createElement('span');w.textContent=u.name;const s=document.createElement('small');s.textContent=u.online?'Online':'Away';w.append(s);r.append(a,w);if(unr[u.id])r.append(el('bd',unr[u.id]));if(u.id===cur)r.classList.add('cur');if(!u.self)r.onclick=()=>openThread(u.id);box.append(r)});
- $('#cnt').textContent=c+' online';updSub()}
-function updSub(){if(client?.connected)$('#sub').textContent=cur!=='lab'?'Private · end-to-end encrypted':[...users.values()].filter(u=>u.online).length+1+' in the lab'+(rkey?' · encrypted':'')}
+ $('#cnt').textContent=c+' online';updSub();if(pickOn)renderPick()}
+function updSub(){if(client?.connected)$('#sub').textContent=cur!=='lab'?'Private · end-to-end encrypted'+(users.get(cur)?.online===false?' · delivered when they return':''):[...users.values()].filter(u=>u.online).length+1+' in the lab'+(rkey?' · encrypted':'')}
 
 /* render */
 function fmt(s){return esc(s).replace(/`([^`\n]+)`/g,'<code>$1</code>').replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/(^|\s)_(.+?)_(?=\s|$)/g,'$1<i>$2</i>').replace(/(^|\s)@([\p{L}\p{N}_][\p{L}\p{N}_.-]*)/gu,(a,sp,n)=>sp+'<span class="mn'+(isMe(n)?' me':'')+'">@'+n+'</span>').replace(/https?:\/\/[^\s<]+/g,u=>`<a href="${u}" data-u="${u}" rel="noopener noreferrer">${u}</a>`)}
@@ -342,7 +441,8 @@ async function send(txt){
   m={id:myId+'_'+Date.now().toString(36),userId:myId,name:me.name,message:v.slice(0,CFG.max),timestamp:Date.now(),th:cur,r:rp},
   wire=rp?'::rp::'+JSON.stringify({r:rp,m:m.message}):m.message;
  try{const p={id:m.id,userId:myId,name:me.name,timestamp:m.timestamp};let t=CFG.chat,ret=false;
-  if(dm){const u=users.get(cur),k=await peerKey(cur);if(!u?.online||!k)return toast('They need to be online to get a private message.');p.e=await enc(k,wire);t=CFG.dm+cur}
+  if(dm){const k=await peerKey(cur);if(!k)return toast('They have not opened the updated app yet, so there is no key to encrypt with.');p.e=await enc(k,wire);
+   const dq=S.get('dmq',{});dq[cur]=((dq[cur]||0)+1)%1e6;S.set('dmq',dq);t=CFG.dm+cur+'/'+myId+'/'+dq[cur]%CFG.keep;ret=true}
   else{if(rkey)p.e=await enc(rkey,wire);else p.message=wire;p.q=++seq;m.q=p.q;t=CFG.chat+'/r/'+p.q%CFG.keep;ret=true}
   client.publish(t,JSON.stringify(p),{qos:1,retain:ret})}catch{return toast('Could not send. Try again.')}
  seen.add(m.id);store(m);add(m,true);if(txt==null){input.value='';fit();stopTyping();setCtx(null)}return true}
@@ -361,7 +461,12 @@ $('#clear').onclick=()=>{if(!confirm('Clear the conversation on this device? Oth
 
 /* privacy: end-to-end keys (Web Crypto) */
 const b64=b=>btoa(String.fromCharCode(...new Uint8Array(b))),unb=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0)),te=new TextEncoder,dmKeys={};
-async function initKeys(){kp=await crypto.subtle.generateKey({name:'ECDH',namedCurve:'P-256'},false,['deriveKey']);myPub=await crypto.subtle.exportKey('jwk',kp.publicKey)}
+const idb=(mode,fn)=>new Promise((ok,no)=>{const r=indexedDB.open('aadameet',1);r.onupgradeneeded=()=>r.result.createObjectStore('k');r.onerror=()=>no(r.error);
+ r.onsuccess=()=>{const q=fn(r.result.transaction('k',mode).objectStore('k'));q.onsuccess=()=>ok(q.result);q.onerror=()=>no(q.error)}});
+async function initKeys(){
+ try{kp=await idb('readonly',s=>s.get('kp'))}catch{}
+ if(!kp?.privateKey||!kp?.publicKey){kp=await crypto.subtle.generateKey({name:'ECDH',namedCurve:'P-256'},false,['deriveKey']);try{await idb('readwrite',s=>s.put(kp,'kp'))}catch{}}
+ myPub=await crypto.subtle.exportKey('jwk',kp.publicKey)}
 async function roomKey(p){const m=await crypto.subtle.importKey('raw',te.encode(p),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt:te.encode('aadameet-lab-v1'),iterations:150000,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
 async function dmKey(j){const id=j.x+j.y;return dmKeys[id]||(dmKeys[id]=await crypto.subtle.deriveKey({name:'ECDH',public:await crypto.subtle.importKey('jwk',{kty:'EC',crv:'P-256',x:j.x,y:j.y},{name:'ECDH',namedCurve:'P-256'},false,[])},kp.privateKey,{name:'AES-GCM',length:256},false,['encrypt','decrypt']))}
 const peerKey=async id=>{try{const k=users.get(id)?.k;return k?await dmKey(k):null}catch{return null}};
@@ -413,12 +518,12 @@ async function onPin(d){let a=d?.pins;if(typeof d?.e==='string'){try{a=JSON.pars
  pins=Array.isArray(a)?a.slice(-3).map(cleanR).filter(Boolean):[];showPins()}
 const jump=id=>{const o=list.querySelector('[data-id="'+id+'"]');o?o.scrollIntoView({block:'center',behavior:'smooth'}):toast('That message is not on this device')};
 $('#pinbar').onclick=()=>{const w=el('opts');pins.slice().reverse().forEach(p=>{const b=document.createElement('button'),t=document.createElement('span');b.innerHTML='<span class="mi">push_pin</span>';t.textContent=p.n+': '+p.t;b.append(t);b.onclick=()=>{closeSheet();jump(p.id)};w.append(b)});sheet('Pinned messages',w)};
-let popClose=null;
+let popClose=null,closedAt=0,lastTouch=0,lpAt=0;
 function msgPop(m,row){
  if(m.del)return;popClose?.();
  const own=m.userId===myId,grp=cur==='lab',f=m.message.startsWith('::file::'),bg=el('pbg'),pill=el('ppill'),menu=el('pmenu');
  row.scrollIntoView({block:'nearest'});
- const close=()=>{bg.remove();pill.remove();menu.remove();row.classList.remove('lift');popClose=null};popClose=close;bg.onclick=close;
+ const close=()=>{bg.remove();pill.remove();menu.remove();row.classList.remove('lift');popClose=null;closedAt=Date.now()};popClose=close;bg.onclick=close;
  const opt=(ic,tx,fn,cls)=>{const b=document.createElement('button'),t=document.createElement('span');b.innerHTML='<span class="mi">'+ic+'</span>';t.textContent=tx;b.append(t);if(cls)b.className=cls;b.onclick=()=>{close();fn()};menu.append(b)};
  if(grp)EMO.forEach(e=>{const b=document.createElement('button');b.textContent=e;if((m.rx?.[e]||[]).includes(myId))b.className='mine';b.onclick=()=>{close();react(m,e)};pill.append(b)});
  opt('reply','Reply',()=>setCtx('reply',m));
@@ -434,12 +539,32 @@ function msgPop(m,row){
  const put=(n,y)=>{const w=n.offsetWidth;n.style.top=Math.min(Math.max(y,8),H-n.offsetHeight-8)+'px';n.style.left=Math.min(Math.max(own?bb.right-w:bb.left,12),W-w-12)+'px'};
  if(grp)put(pill,pt);put(menu,mt)}
 addEventListener('keydown',e=>{if(e.key==='Escape')popClose?.()});addEventListener('resize',()=>popClose?.());
+/* opening the menu: hold on touch screens, double-click with a mouse (a single tap/click does nothing) */
+const rowMsg=row=>row&&hist.find(x=>x.id===row.dataset.id);
 list.addEventListener('click',e=>{
- const t=e.target,row=t.closest('.row');if(!row||t.closest('a,button,pre,.code')||getSelection().toString())return;
+ const t=e.target,row=t.closest('.row');if(!row)return;
  const rq=t.closest('.rq');if(rq)return jump(rq.dataset.r);
- const m=hist.find(x=>x.id===row.dataset.id);if(!m)return;
- const rx=t.closest('.rx span');if(rx)return cur==='lab'&&react(m,rx.dataset.em);
- msgPop(m,row)});
+ const rx=t.closest('.rx span'),m=rowMsg(row);if(rx&&m&&cur==='lab')react(m,rx.dataset.em)});
+list.addEventListener('dblclick',e=>{
+ if(Date.now()-lastTouch<800||Date.now()-closedAt<500)return;
+ const t=e.target,row=t.closest('.row'),m=rowMsg(row);if(!m||t.closest('a,button,pre,.rq,.rx'))return;
+ getSelection().removeAllRanges();msgPop(m,row)});
+list.addEventListener('mousedown',e=>{if(e.detail>1&&e.target.closest('.row')&&!e.target.closest('pre'))e.preventDefault()});
+let lp=0,lpX=0,lpY=0;const lpStop=()=>{clearTimeout(lp);lp=0};
+list.addEventListener('touchstart',e=>{
+ lastTouch=Date.now();if(popClose||e.touches.length!==1)return;
+ const t=e.target,row=t.closest('.row'),m=rowMsg(row);if(!m||t.closest('a,pre,.rq,.rx'))return;
+ lpX=e.touches[0].clientX;lpY=e.touches[0].clientY;
+ lp=setTimeout(()=>{lp=0;lpAt=Date.now();navigator.vibrate?.(12);msgPop(m,row)},450)},{passive:true});
+list.addEventListener('touchmove',e=>{const p=e.touches[0];if(lp&&Math.hypot(p.clientX-lpX,p.clientY-lpY)>10)lpStop()},{passive:true});
+['touchend','touchcancel','scroll'].forEach(n=>list.addEventListener(n,lpStop,{passive:true}));
+list.addEventListener('contextmenu',e=>{if(Date.now()-lastTouch<1500)e.preventDefault()});
+/* while the menu is open, the next click/tap anywhere (message, file, empty space) only closes it */
+document.addEventListener('click',e=>{
+ if(!popClose)return;
+ if(Date.now()-lpAt<600){e.preventDefault();e.stopPropagation();return}
+ if(e.target.closest('.ppill,.pmenu'))return;
+ e.preventDefault();e.stopPropagation();popClose()},true);
 input.addEventListener('input',()=>{
  const box=$('#mnb'),q=/(?:^|\s)@([\p{L}\p{N}_.-]*)$/u.exec(input.value.slice(0,input.selectionStart));
  const names=q&&cur==='lab'?[...users.values()].map(u=>u.name.split(/\s+/)[0]).filter((n,i,a)=>a.indexOf(n)===i&&n.toLowerCase().startsWith(q[1].toLowerCase())).slice(0,6):[];
@@ -457,7 +582,7 @@ async function sendFile(file){
  if(!file.size)return toast('That file is empty.');
  if(file.size>CFG.fmax)return toast('Files can be up to '+fmtSize(CFG.fmax)+'.');
  const dm=cur!=='lab',key=dm?await peerKey(cur):rkey;
- if(dm&&(!key||!users.get(cur)?.online))return toast('They need to be online to get a file.');
+ if(dm&&!key)return toast('They have not opened the updated app yet, so there is no key to encrypt with.');
  const buf=await file.arrayBuffer(),size=buf.byteLength,n=Math.ceil(size/CFG.fchunk),id=myId+'-'+Date.now().toString(36),name=safeName(file.name),
   h=crypto.subtle?b64(await crypto.subtle.digest('SHA-256',buf)):'';
  fx[id]={parts:{},got:n,meta:{n,name,size,h},blob:new Blob([buf])};
@@ -515,7 +640,9 @@ $('#fi').onchange=e=>{const f=e.target.files[0];e.target.value='';if(f)sendFile(
 const mainEl=document.querySelector('.main');mainEl.ondragover=e=>e.preventDefault();
 mainEl.ondrop=e=>{e.preventDefault();const f=e.dataTransfer.files[0];if(f)sendFile(f)};
 function flush(){
- ready=true;backlog.sort((a,b)=>a.timestamp-b.timestamp).forEach(m=>{m.th='lab';store(m);if(cur==='lab')add(m,m.userId===myId)});backlog=[];
+ ready=true;const dn={};backlog.sort((a,b)=>a.timestamp-b.timestamp).forEach(m=>{m.th=m.th||'lab';store(m);
+  if(m.th===cur)add(m,m.userId===myId);else if(m.th!=='lab'){unr[m.th]=(unr[m.th]||0)+1;dn[m.th]=m}});
+ backlog=[];Object.values(dn).forEach(notify);renderMembers();
  if(skipped)sys(`${skipped} earlier message${skipped>1?'s are':' is'} encrypted with a different room key`);skipped=0}
 function saveCred(){if(lastCred&&window.PasswordCredential)navigator.credentials.store(new PasswordCredential({id:lastCred.u,password:lastCred.p,name:lastCred.n})).catch(()=>{});lastCred=null}
 function openThread(id){
